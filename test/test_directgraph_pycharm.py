@@ -1,11 +1,11 @@
-from graph import DirectedGraph
+from  ..source import DirectedGraph
 
 
 def test_graph():
     graph = DirectedGraph()
-    graph.add_vertex("banane")
-    graph.add_edge("banane", 2, 3)
-    graph.add_edge(2, "banane", 1)
+    graph.add_vertex(1)
+    graph.add_edge(1, 2, 3)
+    graph.add_edge(2, 1, 1)
     graph.add_edge(2, 3, 1)
 
     print("vertice\n", graph.vertices)
@@ -16,8 +16,9 @@ def test_graph():
     for vertex in graph:
         print(vertex)
     # graph.remove_edge(1, 2)
-    graph.remove_vertex("banane")
+    graph.remove_vertex(1)
     print("Graph\n", graph)
+    print(graph.dijkstra_basic_version())
 
 
 test_graph()

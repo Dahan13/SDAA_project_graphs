@@ -1,5 +1,6 @@
 from typing import Dict, Any, List
 import copy
+import math
 
 
 class DirectedGraph:
@@ -80,6 +81,42 @@ class DirectedGraph:
 
     def __str__(self) -> str:
         return str(self.edges)
+
+    def __neq__(self: 'DirectedGraph', other: 'DirectedGraph') -> bool:
+        return self.edges != other.edges
+
+    def dijkstra_basic_version(self, chosen_vertex: Any) -> dict:
+        # Initializing values
+        dist = {}
+        pred = {}
+        for vertex in self :
+            dist[vertex] = math.inf
+            pred[vertex] = None
+        dist[chosen_vertex] = 0
+
+        # Beginning study
+        studied_graph = copy.deepcopy(self)
+        print(studied_graph)
+        while len(studied_graph.edges) != 0: # While studied graph is not empty
+
+            # Return key with lowest value
+            better_dist = math.inf
+            for vertex in studied_graph :
+                if dist[vertex] < better_dist:
+                    better_dist = dist[vertex]
+                    nearest_vertex = vertex
+            # Actually we can't use min method because it may return the key of an already deleted vertex
+
+
+            # Make a copy of nearest_vertex related infos since we will delete it right away
+            nearest_vertex_infos = copy.deepcopy(studied_graph[nearest_vertex])
+            studied_graph.remove_vertex(nearest_vertex)
+            for vertex in nearest_vertex_infos.keys():
+                if dist[vertex] > dist[nearest_vertex] + nearest_vertex_infos[vertex]:
+                    dist[vertex] = dist[nearest_vertex] + nearest_vertex_infos[vertex]
+                    pred[vertex] = nearest_vertex
+        return dist
+
 
 
 

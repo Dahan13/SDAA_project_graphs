@@ -1,8 +1,9 @@
-from typing import Dict, Any, List
-import copy
+from typing import Any, List
 
 
 class DirectedGraph:
+    """oriented graph coded as a dict of dict"""
+
     def __init__(self, edges=None) -> None:
         if edges is None:
             edges = {}
@@ -24,7 +25,7 @@ class DirectedGraph:
             raise ValueError
 
     @property
-    def vertices(self):
+    def vertices(self) -> List:
         return [element for element in self.edges.keys()]
 
     def add_vertex(self, vertex: Any) -> None:
@@ -38,7 +39,7 @@ class DirectedGraph:
     def add_edge(self, vertex1: Any, vertex2: Any, weight: int) -> None:
         if vertex1 not in self.edges.keys():
             self.add_vertex(vertex1)
-        if vertex2 not in self.edges.keys() :
+        if vertex2 not in self.edges.keys():
             self.add_vertex(vertex2)
         self.edges[vertex1][vertex2] = weight
 
@@ -82,4 +83,26 @@ class DirectedGraph:
         return str(self.edges)
 
 
+class UndirectGraph(DirectedGraph):
+    """non oriented graph coded as a dict of dict"""
 
+    def __init__(self, edges=None) -> None:
+        super().__init__(edges)
+        for vertice in self.vertices:
+            for target in self.edges[vertice].keys():
+                if vertice not in self.edges[target].keys():
+                    raise ValueError
+                if self.edges[target][vertice] != self.edges[vertice][target]:
+                    raise ValueError
+
+    def add_edge(self, vertex1: Any, vertex2: Any, weight: int) -> None:
+        if vertex1 not in self.edges.keys():
+            self.add_vertex(vertex1)
+        if vertex2 not in self.edges.keys():
+            self.add_vertex(vertex2)
+        self.edges[vertex1][vertex2] = weight
+        self.edges[vertex2][vertex1] = weight
+
+    def remove_edge(self, vertex1: Any, vertex2: Any) -> None:
+        del self.edges[vertex1][vertex2]
+        del self.edges[vertex2][vertex1]

@@ -6,6 +6,9 @@ class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.graph = DirectedGraph()
         self.graph2 = UndirectGraph()
+        self.graph_0 = UndirectGraph()
+        self.graph_1 = UndirectGraph({0: {}})
+        self.graph_2 = UndirectGraph({0: {1: 0}, 1: {0: 0}})
 
     def test_add_vertex_dir(self):
         self.graph.add_vertex("banane")
@@ -58,6 +61,17 @@ class MyTestCase(unittest.TestCase):
         self.graph2.remove_edge(2, 3)
         assert self.graph2.edges[2] == {"banane": 1}
         assert self.graph2.edges[3] == {}
+
+    def test_eq(self):
+        assert self.graph == self.graph_0
+
+    def test_eq2(self):
+        graph1 = DirectedGraph({0: {}})
+        assert graph1 == self.graph_1
+
+    def test_gen_and_eq(self):
+        graph = DirectedGraph({0: {1: 0}, 1: {0: 0}})
+        assert graph == self.graph_2
 
 
 if __name__ == '__main__':

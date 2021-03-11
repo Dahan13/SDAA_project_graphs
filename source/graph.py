@@ -17,8 +17,8 @@ class DirectedGraph:
     def edges(self, edges):
         if isinstance(edges, dict):
             for edge in edges:
-                for voisin in edge:
-                    if edge[voisin] <= 0 and not isinstance(edge, dict):
+                for voisin in edges[edge]:
+                    if edges[edge][voisin] <= 0 and not isinstance(edges[edge], dict):
                         raise ValueError
             self.__edges = edges
         else:
@@ -36,7 +36,7 @@ class DirectedGraph:
         for edge in self.edges:
             self.edges[edge].pop(vertex, None)
 
-    def add_edge(self, vertex1: Any, vertex2: Any, weight: int) -> None:
+    def add_edge(self, vertex1: Any, vertex2: Any, weight: int = 0) -> None:
         if vertex1 not in self.edges.keys():
             self.add_vertex(vertex1)
         if vertex2 not in self.edges.keys():
@@ -82,6 +82,9 @@ class DirectedGraph:
     def __str__(self) -> str:
         return str(self.edges)
 
+    def __eq__(self, other) -> bool:
+        return self.edges == other.edges
+
 
 class UndirectGraph(DirectedGraph):
     """non oriented graph coded as a dict of dict"""
@@ -95,7 +98,7 @@ class UndirectGraph(DirectedGraph):
                 if self.edges[target][vertice] != self.edges[vertice][target]:
                     raise ValueError
 
-    def add_edge(self, vertex1: Any, vertex2: Any, weight: int) -> None:
+    def add_edge(self, vertex1: Any, vertex2: Any, weight: int = 0) -> None:
         if vertex1 not in self.edges.keys():
             self.add_vertex(vertex1)
         if vertex2 not in self.edges.keys():

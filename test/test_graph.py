@@ -1,14 +1,14 @@
 import unittest
-from graph import DirectedGraph, UndirectGraph
+from graph import DirectedGraph, UndirectedGraph
 
 
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.graph = DirectedGraph()
-        self.graph2 = UndirectGraph()
-        self.graph_0 = UndirectGraph()
-        self.graph_1 = UndirectGraph({0: {}})
-        self.graph_2 = UndirectGraph({0: {1: 0}, 1: {0: 0}})
+        self.graph2 = UndirectedGraph()
+        self.graph_0 = UndirectedGraph()
+        self.graph_1 = UndirectedGraph({0: {}})
+        self.graph_2 = UndirectedGraph({0: {1: 1}, 1: {0: 1}})
 
     def test_add_vertex_dir(self):
         self.graph.add_vertex("banane")
@@ -70,7 +70,7 @@ class MyTestCase(unittest.TestCase):
         assert graph1 == self.graph_1
 
     def test_gen_and_eq(self):
-        graph = DirectedGraph({0: {1: 0}, 1: {0: 0}})
+        graph = DirectedGraph({0: {1: 1}, 1: {0: 1}})
         assert graph == self.graph_2
 
 

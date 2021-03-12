@@ -4,9 +4,9 @@ from graph_generation import *
 
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        self.graph_0 = UndirectGraph()
-        self.graph_1 = UndirectGraph({0: {}})
-        self.graph_2 = UndirectGraph({0: {1: 0}, 1: {0: 0}})
+        self.graph_0 = UndirectedGraph()
+        self.graph_1 = UndirectedGraph({0: {}})
+        self.graph_2 = UndirectedGraph({0: {1: 1}, 1: {0: 1}})
 
     def test_minimal_case(self):
         graph = generate_random_graph(0, 0)
@@ -34,10 +34,11 @@ class MyTestCase(unittest.TestCase):
             for edge in graph.edges[node]:
                 if (node, edge) not in done and (edge, node) not in done:
                     done.append((node, edge))
-        print(len(done))
+        assert len(done) == 8
 
 
     def test_edge_number_directed(self):
+        print("here")
         graph = generate_random_graph(5, 8, directed=True)
         print(graph)
         sum = 0

@@ -147,7 +147,7 @@ class DirectedGraph:
                 # Pushing new vertex infos on temp queue
                 heapq.heappush(queue2, current_item)
             # Pouring everything into my main queue, note that nearest_vertex infos are no longer in it !
-            queue = copy.deepcopy(queue2)
+            queue = queue2 # No need to use deepcopy here, it will make the function globally 2 times faster.
         return dist
 
 

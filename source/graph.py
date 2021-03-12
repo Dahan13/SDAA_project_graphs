@@ -17,8 +17,8 @@ class DirectedGraph:
     def edges(self, edges):
         if isinstance(edges, dict):
             for edge in edges:
-                for voisin in edge:
-                    if edge[voisin] <= 0 and not isinstance(edge, dict):
+                for voisin in edges[edge]:
+                    if edges[edge][voisin] <= 0 and not isinstance(edges[edge], dict):
                         raise ValueError
             self.__edges = edges
         else:
@@ -36,11 +36,17 @@ class DirectedGraph:
         for edge in self.edges:
             self.edges[edge].pop(vertex, None)
 
-    def add_edge(self, vertex1: Any, vertex2: Any, weight: int) -> None:
+    def add_edge(self, vertex1: Any, vertex2: Any, weight: int = 1, checker: bool = False) -> bool:
         if vertex1 not in self.edges.keys():
             self.add_vertex(vertex1)
         if vertex2 not in self.edges.keys():
             self.add_vertex(vertex2)
+        if checker:
+            if vertex2 in self.edges[vertex1]:
+                return False
+            else:
+                self.edges[vertex1][vertex2] = weight
+                return True
         self.edges[vertex1][vertex2] = weight
 
     def remove_edge(self, vertex1: Any, vertex2: Any) -> None:
@@ -82,8 +88,11 @@ class DirectedGraph:
     def __str__(self) -> str:
         return str(self.edges)
 
+    def __eq__(self, other) -> bool:
+        return self.edges == other.edges
 
-class UndirectGraph(DirectedGraph):
+
+class UndirectedGraph(DirectedGraph):
     """non oriented graph coded as a dict of dict"""
 
     def __init__(self, edges=None) -> None:
@@ -95,11 +104,18 @@ class UndirectGraph(DirectedGraph):
                 if self.edges[target][vertice] != self.edges[vertice][target]:
                     raise ValueError
 
-    def add_edge(self, vertex1: Any, vertex2: Any, weight: int) -> None:
+    def add_edge(self, vertex1: Any, vertex2: Any, weight: int = 1, checker: bool = False) -> bool:
         if vertex1 not in self.edges.keys():
             self.add_vertex(vertex1)
         if vertex2 not in self.edges.keys():
             self.add_vertex(vertex2)
+        if checker:
+            if vertex2 in self.edges[vertex1] and vertex1 in self.edges[vertex2]:
+                return False
+            else:
+                self.edges[vertex1][vertex2] = weight
+                self.edges[vertex2][vertex1] = weight
+                return True
         self.edges[vertex1][vertex2] = weight
         self.edges[vertex2][vertex1] = weight
 

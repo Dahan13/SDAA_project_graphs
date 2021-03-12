@@ -3,8 +3,10 @@ import copy
 import math
 import heapq
 
+
 class DirectedGraph:
     """oriented graph coded as a dict of dict"""
+
     def __init__(self, edges=None) -> None:
         if edges is None:
             edges = {}
@@ -91,7 +93,7 @@ class DirectedGraph:
 
     def __neq__(self: 'DirectedGraph', other: 'DirectedGraph') -> bool:
         return self.edges != other.edges
-    
+
     def __eq__(self, other) -> bool:
         return self.edges == other.edges
 
@@ -99,26 +101,25 @@ class DirectedGraph:
         # Initializing values
         dist = {}
         pred = {}
-        for vertex in self :
+        for vertex in self:
             dist[vertex] = math.inf
             pred[vertex] = None
         dist[chosen_vertex] = 0
 
         # Beginning study
         studied_graph = copy.deepcopy(self)
-        while len(studied_graph.edges) != 0: # While studied graph is not empty
+        while len(studied_graph.edges) != 0:  # While studied graph is not empty
 
             # Return key with lowest value
             better_dist = math.inf
-            for vertex in studied_graph :
+            for vertex in studied_graph:
                 if dist[vertex] < better_dist:
                     better_dist = dist[vertex]
                     nearest_vertex = vertex
             # Actually we can't use min method because it may return the key of an already deleted vertex
 
-
             # Make a copy of nearest_vertex related infos since we will delete it right away
-            nearest_vertex_infos = [(value, key) for key,value in studied_graph[nearest_vertex].items()]
+            nearest_vertex_infos = [(value, key) for key, value in studied_graph[nearest_vertex].items()]
             studied_graph.remove_vertex(nearest_vertex)
             for vertex in nearest_vertex_infos:
                 if dist[vertex[1]] > dist[nearest_vertex] + vertex[0]:
@@ -126,20 +127,18 @@ class DirectedGraph:
                     pred[vertex[1]] = nearest_vertex
         return dist
 
-
     def dijkstra_heap_version(self, chosen_vertex: Any) -> dict:
         # Initializing values
-        dist = {} # Only used for final output
-        queue = [] # Items in queue will have following structure : [distance, predecessor, vertex key]
-        for vertex in self :
+        dist = {}  # Only used for final output
+        queue = []  # Items in queue will have following structure : [distance, predecessor, vertex key]
+        for vertex in self:
             if vertex == chosen_vertex:
                 heapq.heappush(queue, [0, None, vertex])
             else:
                 heapq.heappush(queue, [math.inf, None, vertex])
-            
 
         # Beginning study
-        while queue != []: # While main queue is not empty
+        while queue != []:  # While main queue is not empty
 
             # Return info of vertex with lowest distancen heap type use allowed for great complexity reduction
             nearest_vertex = heapq.heappop(queue)
@@ -147,22 +146,21 @@ class DirectedGraph:
             # nearest_vertex is not explicitely deleted, but we won't push it into the queue so it's the same
 
             # Handling datas
-            queue2 = [] # queue2 is for temp storage
+            queue2 = []  # queue2 is for temp storage
             for i in range(len(queue)):
                 current_item = heapq.heappop(queue)
                 # Check conditions
                 if current_item[2] in self.edges[nearest_vertex[2]].keys() and current_item[0] > nearest_vertex[0] + self.edges[nearest_vertex[2]][current_item[2]]:
-                        current_item[0] = nearest_vertex[0] + self.edges[nearest_vertex[2]][current_item[2]]
-                        current_item[1] = nearest_vertex[2]
+                    current_item[0] = nearest_vertex[0] + self.edges[nearest_vertex[2]][current_item[2]]
+                    current_item[1] = nearest_vertex[2]
                 # Pushing new vertex infos on temp queue
                 heapq.heappush(queue2, current_item)
             # Pouring everything into my main queue, note that nearest_vertex infos are no longer in it !
-            queue = queue2 # No need to use deepcopy here, it will make the function globally 2 times faster.
+            queue = queue2  # No need to use deepcopy here, it will make the function globally 2 times faster.
         return dist
 
 
 class UndirectedGraph(DirectedGraph):
-  
     """non oriented graph coded as a dict of dict"""
 
     def __init__(self, edges=None) -> None:

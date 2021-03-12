@@ -73,6 +73,13 @@ class MyTestCase(unittest.TestCase):
         graph = DirectedGraph({0: {1: 1}, 1: {0: 1}})
         assert graph == self.graph_2
 
+    def test_dijckstra(self):
+        used_graph = self.graph_2
+        basic = used_graph.dijkstra_basic_version(1)
+        heap = used_graph.dijkstra_heap_version(1)
+        for vertex in used_graph.edges.keys():  # Checking values
+            assert basic[vertex] == heap[vertex]
+
 
 if __name__ == '__main__':
     unittest.main()

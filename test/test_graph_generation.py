@@ -36,7 +36,6 @@ class MyTestCase(unittest.TestCase):
                     done.append((node, edge))
         assert len(done) == 8
 
-
     def test_edge_number_directed(self):
         print("here")
         graph = generate_random_graph(5, 8, directed=True)

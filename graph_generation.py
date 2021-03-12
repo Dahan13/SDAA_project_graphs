@@ -19,7 +19,7 @@ def generate_random_graph(n_nodes: int, n_edges: int, directed: bool = False) ->
     for node in range(2, n_nodes):
         arrival = rd.randint(0, node - 1)
         graph.add_edge(node, arrival)
-        remaining_edges -=1
+        remaining_edges -= 1
     while remaining_edges > 0:
         departure = rd.randint(0, n_nodes - 1)
         arrival = rd.randint(0, n_nodes - 1)
@@ -27,4 +27,3 @@ def generate_random_graph(n_nodes: int, n_edges: int, directed: bool = False) ->
         if check:
             remaining_edges -= 1
     return graph
-

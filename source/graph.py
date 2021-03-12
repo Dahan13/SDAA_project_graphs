@@ -4,6 +4,7 @@ import math
 import heapq
 
 class DirectedGraph:
+    """oriented graph coded as a dict of dict"""
     def __init__(self, edges=None) -> None:
         if edges is None:
             edges = {}
@@ -17,15 +18,15 @@ class DirectedGraph:
     def edges(self, edges):
         if isinstance(edges, dict):
             for edge in edges:
-                for voisin in edge:
-                    if edge[voisin] <= 0 and not isinstance(edge, dict):
+                for voisin in edges[edge]:
+                    if edges[edge][voisin] <= 0 and not isinstance(edges[edge], dict):
                         raise ValueError
             self.__edges = edges
         else:
             raise ValueError
 
     @property
-    def vertices(self):
+    def vertices(self) -> List:
         return [element for element in self.edges.keys()]
 
     def add_vertex(self, vertex: Any) -> None:
@@ -36,11 +37,17 @@ class DirectedGraph:
         for edge in self.edges:
             self.edges[edge].pop(vertex, None)
 
-    def add_edge(self, vertex1: Any, vertex2: Any, weight: int) -> None:
+    def add_edge(self, vertex1: Any, vertex2: Any, weight: int = 1, checker: bool = False) -> bool:
         if vertex1 not in self.edges.keys():
             self.add_vertex(vertex1)
-        if vertex2 not in self.edges.keys() :
+        if vertex2 not in self.edges.keys():
             self.add_vertex(vertex2)
+        if checker:
+            if vertex2 in self.edges[vertex1]:
+                return False
+            else:
+                self.edges[vertex1][vertex2] = weight
+                return True
         self.edges[vertex1][vertex2] = weight
 
     def remove_edge(self, vertex1: Any, vertex2: Any) -> None:
@@ -84,6 +91,9 @@ class DirectedGraph:
 
     def __neq__(self: 'DirectedGraph', other: 'DirectedGraph') -> bool:
         return self.edges != other.edges
+    
+    def __eq__(self, other) -> bool:
+        return self.edges == other.edges
 
     def dijkstra_basic_version(self, chosen_vertex: Any) -> dict:
         # Initializing values
@@ -151,5 +161,34 @@ class DirectedGraph:
         return dist
 
 
+class UndirectedGraph(DirectedGraph):
+  
+    """non oriented graph coded as a dict of dict"""
 
+    def __init__(self, edges=None) -> None:
+        super().__init__(edges)
+        for vertice in self.vertices:
+            for target in self.edges[vertice].keys():
+                if vertice not in self.edges[target].keys():
+                    raise ValueError
+                if self.edges[target][vertice] != self.edges[vertice][target]:
+                    raise ValueError
 
+    def add_edge(self, vertex1: Any, vertex2: Any, weight: int = 1, checker: bool = False) -> bool:
+        if vertex1 not in self.edges.keys():
+            self.add_vertex(vertex1)
+        if vertex2 not in self.edges.keys():
+            self.add_vertex(vertex2)
+        if checker:
+            if vertex2 in self.edges[vertex1] and vertex1 in self.edges[vertex2]:
+                return False
+            else:
+                self.edges[vertex1][vertex2] = weight
+                self.edges[vertex2][vertex1] = weight
+                return True
+        self.edges[vertex1][vertex2] = weight
+        self.edges[vertex2][vertex1] = weight
+
+    def remove_edge(self, vertex1: Any, vertex2: Any) -> None:
+        del self.edges[vertex1][vertex2]
+        del self.edges[vertex2][vertex1]

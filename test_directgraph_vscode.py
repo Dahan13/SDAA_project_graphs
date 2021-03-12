@@ -1,4 +1,4 @@
-from  source.directgraph import DirectedGraph
+from  source.graph import DirectedGraph
 import time
 
 def test_graph():

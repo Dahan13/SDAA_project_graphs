@@ -1,14 +1,14 @@
 import unittest
-from graph import DirectedGraph, UndirectedGraph
-
+from source import graph as grp
+import graph_generation as randgraph
 
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        self.graph = DirectedGraph()
-        self.graph2 = UndirectedGraph()
-        self.graph_0 = UndirectedGraph()
-        self.graph_1 = UndirectedGraph({0: {}})
-        self.graph_2 = UndirectedGraph({0: {1: 1}, 1: {0: 1}})
+        self.graph = grp.DirectedGraph()
+        self.graph2 = grp.UndirectedGraph()
+        self.graph_0 = grp.UndirectedGraph()
+        self.graph_1 = grp.UndirectedGraph({0: {}})
+        self.graph_2 = grp.UndirectedGraph({0: {1: 1}, 1: {0: 1}})
 
     def test_add_vertex_dir(self):
         self.graph.add_vertex("banane")
@@ -66,19 +66,20 @@ class MyTestCase(unittest.TestCase):
         assert self.graph == self.graph_0
 
     def test_eq2(self):
-        graph1 = DirectedGraph({0: {}})
+        graph1 = grp.DirectedGraph({0: {}})
         assert graph1 == self.graph_1
 
     def test_gen_and_eq(self):
-        graph = DirectedGraph({0: {1: 1}, 1: {0: 1}})
+        graph = grp.DirectedGraph({0: {1: 1}, 1: {0: 1}})
         assert graph == self.graph_2
 
     def test_dijckstra(self):
-        used_graph = self.graph_2
-        basic = used_graph.dijkstra_basic_version(1)
-        heap = used_graph.dijkstra_heap_version(1)
-        for vertex in used_graph.edges.keys():  # Checking values
-            assert basic[vertex] == heap[vertex]
+        for i in range(10):
+            used_graph = randgraph.random_generation(10)
+            basic = used_graph.dijkstra_basic_version(1)
+            heap = used_graph.dijkstra_heap_version(1)
+            for vertex in used_graph.edges.keys():  # Checking values
+                assert basic[vertex] == heap[vertex]
 
 
 if __name__ == '__main__':

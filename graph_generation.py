@@ -78,4 +78,3 @@ def generate_random_community_graph(n_nodes_per_community: list, p_intra: float,
                     the_graph.add_edge(vertex1, vertex2)
 
     return the_graph
-

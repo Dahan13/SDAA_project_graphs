@@ -41,6 +41,8 @@ def dijkstra_opti_tests(number_of_try: int) -> None:
         end = time.time()
         time_dijkstra_heap += end - start
         time_dijkstra_heap_array.append(time_dijkstra_heap)
+
+        # ploting
     plt.plot(n_array, time_dijkstra_basic_array, label="basic")
     plt.plot(n_array, time_dijkstra_heap_array, label="heap")
     plt.xlabel('Tries number')
@@ -88,6 +90,8 @@ def dijkstra_opti_tests_2(number_of_node: int) -> None:
         end = time.time()
         time_dijkstra_heap += end - start
         time_dijkstra_heap_array.append(time_dijkstra_heap)
+
+        # ploting
     plt.plot(n_array, time_dijkstra_basic_array, label='basic')
     plt.plot(n_array, time_dijkstra_heap_array, label='heap')
     plt.xlabel('Node number')
@@ -133,6 +137,8 @@ def dijkstra_opti_tests_3(number_of_node: int) -> None:
         end = time.time()
         time_dijkstra_heap += end - start
         time_dijkstra_heap_array.append(time_dijkstra_heap)
+
+        # ploting
     plt.plot(n_array, time_dijkstra_basic_array, label='basic')
     plt.plot(n_array, time_dijkstra_heap_array, label='heap')
     plt.xlabel('Edges number')
@@ -146,6 +152,6 @@ def dijkstra_opti_tests_3(number_of_node: int) -> None:
     plt.close()
 
 
-# dijkstra_opti_tests(1000)
-# dijkstra_opti_tests_2(100)
-dijkstra_opti_tests_3(20)
+# dijkstra_opti_tests(10000)
+# dijkstra_opti_tests_2(1000)
+# dijkstra_opti_tests_3(100)

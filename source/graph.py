@@ -81,6 +81,7 @@ class DirectedGraph:
         return self
 
     def __next__(self) -> None:
+
         if self.iterate < len(self.vertices):
             result = self.vertices[self.iterate]
             self.iterate += 1
@@ -91,7 +92,7 @@ class DirectedGraph:
     def __str__(self) -> str:
         return str(self.edges)
 
-    def __neq__(self: 'DirectedGraph', other: 'DirectedGraph') -> bool:
+    def __ne__(self, other: 'DirectedGraph') -> bool:
         return self.edges != other.edges
 
     def __eq__(self, other) -> bool:
@@ -112,7 +113,7 @@ class DirectedGraph:
 
             # Return key with lowest value
             better_dist = math.inf
-            nearest_vertex = studied_graph.vertices[0] # Failsafe, in case the graph is made of one node only without edges.
+            nearest_vertex = studied_graph.vertices[0]  # Failsafe, in case the graph is made of one node only without edges.
             for vertex in studied_graph:
                 if dist[vertex] < better_dist:
                     better_dist = dist[vertex]

@@ -2,6 +2,7 @@ import unittest
 from source import graph as grp
 import graph_generation as randgraph
 
+
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.graph = grp.DirectedGraph()

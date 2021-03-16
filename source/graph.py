@@ -112,6 +112,7 @@ class DirectedGraph:
 
             # Return key with lowest value
             better_dist = math.inf
+            nearest_vertex = studied_graph.vertices[0] # Failsafe, in case the graph is made of one node only without edges.
             for vertex in studied_graph:
                 if dist[vertex] < better_dist:
                     better_dist = dist[vertex]

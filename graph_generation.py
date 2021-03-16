@@ -1,14 +1,16 @@
-from graph import *
+from source import graph as grp
 import random as rd
 
 
-def generate_random_graph(n_nodes: int, n_edges: int, directed: bool = False) -> UndirectedGraph:
+def generate_random_graph(n_nodes: int, n_edges: int, directed: bool = False) -> 'grp.UndirectedGraph':
     """Generate a random connex graph directed or not"""
-    assert n_nodes - 1 <= n_edges <= (n_nodes * (n_nodes - 1)) / 2
+    
     if directed:
-        graph = DirectedGraph()
+        assert n_nodes - 1 <= n_edges <= (n_nodes * (n_nodes - 1))
+        graph = grp.DirectedGraph() # Curse the one who called variable like this -- from the module importation team
     else:
-        graph = UndirectedGraph()
+        assert n_nodes - 1 <= n_edges <= (n_nodes * (n_nodes - 1))/2
+        graph = grp.UndirectedGraph()
     remaining_edges = n_edges
     for node in range(n_nodes):
         graph.add_vertex(node)
@@ -27,3 +29,23 @@ def generate_random_graph(n_nodes: int, n_edges: int, directed: bool = False) ->
         if check:
             remaining_edges -= 1
     return graph
+
+def random_generation(max_nodes: int) -> 'grp.UndirectedGraph':
+    """ Generate a fully randomized graph, only given the maximum numer of nodes, max_nodes should be >= 1 """
+
+    # Checking user input
+    if max_nodes < 1 :
+        print("\nValue of random_generation argument should be >= 1 !\n")
+        raise ValueError
+
+    # Generating random values
+    vertices_number = rd.randint(1, max_nodes)
+    directed = rd.randint(0, 1)
+
+    # Max number of edges change depending if the graph is directed or not !
+    if directed :
+        edges_number = rd.randint(vertices_number - 1, (vertices_number * (vertices_number -1)))
+    else :
+        edges_number = rd.randint(vertices_number - 1, (vertices_number * (vertices_number -1))/2)
+
+    return generate_random_graph(vertices_number, edges_number, directed)

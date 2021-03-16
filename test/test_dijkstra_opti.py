@@ -6,10 +6,10 @@ import random as rand
 
 def dijkstra_opti_tests(number_of_try: int) -> None:
     """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs."""
-    
+
     time_dijkstra_basic = 0
     time_dijkstra_heap = 0
-    for i in range(number_of_try) :
+    for i in range(number_of_try):
         # Generating a random graph and randomly choosing a vertex for dijkstra
         tested_graph = graph_generation.random_generation(10)
         chosen_vertex = rand.randint(0, len(tested_graph) - 1)

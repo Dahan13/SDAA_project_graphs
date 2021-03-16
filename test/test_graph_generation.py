@@ -2,6 +2,7 @@ import unittest
 from graph_generation import *
 
 
+
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.graph_0 = UndirectedGraph()

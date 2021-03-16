@@ -81,14 +81,14 @@ def dijkstra_opti_tests_2(number_of_node: int) -> None:
         start = time.time()
         tested_graph.dijkstra_basic_version(chosen_vertex)
         end = time.time()
-        time_dijkstra_basic += end - start
+        time_dijkstra_basic = end - start
         time_dijkstra_basic_array.append(time_dijkstra_basic)
 
         # For heap version of dijkstra :
         start = time.time()
         tested_graph.dijkstra_heap_version(chosen_vertex)
         end = time.time()
-        time_dijkstra_heap += end - start
+        time_dijkstra_heap = end - start
         time_dijkstra_heap_array.append(time_dijkstra_heap)
 
         # ploting
@@ -128,14 +128,14 @@ def dijkstra_opti_tests_3(number_of_node: int) -> None:
         start = time.time()
         tested_graph.dijkstra_basic_version(chosen_vertex)
         end = time.time()
-        time_dijkstra_basic += end - start
+        time_dijkstra_basic = end - start
         time_dijkstra_basic_array.append(time_dijkstra_basic)
 
         # For heap version of dijkstra :
         start = time.time()
         tested_graph.dijkstra_heap_version(chosen_vertex)
         end = time.time()
-        time_dijkstra_heap += end - start
+        time_dijkstra_heap = end - start
         time_dijkstra_heap_array.append(time_dijkstra_heap)
 
         # ploting

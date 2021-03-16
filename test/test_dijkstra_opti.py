@@ -1,8 +1,12 @@
 import time
-import graph_generation
 import random as rand
 import matplotlib.pyplot as plt
-import sys
+import os, sys, inspect
+
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+import graph_generation
 
 
 def progressBar(current, total, barLength=50):
@@ -152,6 +156,6 @@ def dijkstra_opti_tests_3(number_of_node: int) -> None:
     plt.close()
 
 
-# dijkstra_opti_tests(10000)
-# dijkstra_opti_tests_2(1000)
-# dijkstra_opti_tests_3(100)
+dijkstra_opti_tests(10000)
+dijkstra_opti_tests_2(1000)
+dijkstra_opti_tests_3(100)

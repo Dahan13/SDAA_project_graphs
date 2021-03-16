@@ -27,5 +27,3 @@ def dijkstra_opti_tests(number_of_try: int) -> None:
         time_dijkstra_heap += end - start
     print(f"\nPerformance report on {number_of_try} tests:\n\nBasic dijkstra ran in {time_dijkstra_basic}s.\nHeap dijkstra ran in {time_dijkstra_heap}s.")
 
-
-dijkstra_opti_tests(10000)

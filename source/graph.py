@@ -81,6 +81,7 @@ class DirectedGraph:
         return self
 
     def __next__(self) -> None:
+
         if self.iterate < len(self.vertices):
             result = self.vertices[self.iterate]
             self.iterate += 1

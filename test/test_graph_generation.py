@@ -1,13 +1,13 @@
 import unittest
 from graph_generation import *
-
+from source import graph as grp
 
 
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        self.graph_0 = UndirectedGraph()
-        self.graph_1 = UndirectedGraph({0: {}})
-        self.graph_2 = UndirectedGraph({0: {1: 1}, 1: {0: 1}})
+        self.graph_0 = grp.UndirectedGraph()
+        self.graph_1 = grp.UndirectedGraph({0: {}})
+        self.graph_2 = grp.UndirectedGraph({0: {1: 1}, 1: {0: 1}})
 
     def test_minimal_case(self):
         graph = generate_random_graph(0, 0)

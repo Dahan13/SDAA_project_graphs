@@ -141,9 +141,44 @@ class DirectedGraph:
 
         # Beginning study
         while queue != []:  # While main queue is not empty
-
             # Return info of vertex with lowest distancen heap type use allowed for great complexity reduction
             nearest_vertex = heapq.heappop(queue)
+            dist[nearest_vertex[2]] = nearest_vertex[0]
+            # nearest_vertex is not explicitely deleted, but we won't push it into the queue so it's the same
+
+            # Handling datas
+            queue2 = []  # queue2 is for temp storage
+            for i in range(len(queue)):
+                current_item = heapq.heappop(queue)
+                # Check conditions
+                if current_item[2] in self.edges[nearest_vertex[2]].keys() and current_item[0] > nearest_vertex[0] + self.edges[nearest_vertex[2]][current_item[2]]:
+                    current_item[0] = nearest_vertex[0] + self.edges[nearest_vertex[2]][current_item[2]]
+                    current_item[1] = nearest_vertex[2]
+                # Pushing new vertex infos on temp queue
+                heapq.heappush(queue2, current_item)
+            # Pouring everything into my main queue, note that nearest_vertex infos are no longer in it !
+            queue = queue2  # No need to use deepcopy here, it will make the function globally 2 times faster.
+        return dist
+
+    def dijkstra_one_node(self, chosen_vertex: Any, end_vertex: Any) -> Any:
+        # Initializing values
+        indicator = 0
+        dist = {}  # Only used for final output
+        queue = []  # Items in queue will have following structure : [distance, predecessor, vertex key]
+        for vertex in self:
+            if vertex == chosen_vertex:
+                heapq.heappush(queue, [0, None, vertex])
+            elif end_vertex in self.edges[vertex]:
+                heapq.heappush(queue, [math.inf, None, vertex])
+
+        # Beginning study
+        while queue != []:  # While main queue is not empty
+            print(indicator)
+            indicator += 1
+            # Return info of vertex with lowest distancen heap type use allowed for great complexity reduction
+            nearest_vertex = heapq.heappop(queue)
+            if nearest_vertex[2] == end_vertex :
+                return nearest_vertex[0]
             dist[nearest_vertex[2]] = nearest_vertex[0]
             # nearest_vertex is not explicitely deleted, but we won't push it into the queue so it's the same
 

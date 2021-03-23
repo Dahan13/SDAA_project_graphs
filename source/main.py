@@ -1,4 +1,4 @@
-from source import parser
+import parser_notpythonone
 import heapq
 import datetime
 
@@ -12,7 +12,7 @@ def progressBar(current, total, barLength=50):
 
 
 def create_datas_51():
-    reddit_graph = parser.create_graph("./soc-redditHyperlinks-title.tsv")
+    reddit_graph = parser_notpythonone.create_graph("./../soc-redditHyperlinks-title.tsv")
 
     nolink_list = []
     greater_list = [(len(reddit_graph.edges[reddit_graph.vertices[i]]), reddit_graph.vertices[i]) for i in range(10)]
@@ -34,7 +34,7 @@ def create_datas_51():
 
 
 def create_datas_52():
-    reddit_graph = parser.create_graph("./soc-redditHyperlinks-title.tsv")
+    reddit_graph = parser_notpythonone.create_graph("./../soc-redditHyperlinks-title.tsv")
 
     # Find the 2% of active subreddits
     nbr_subreddit = len(reddit_graph)
@@ -71,7 +71,12 @@ def create_logs(line1: any, line2: any) -> None:
     f.write(str(line2))
     f.close()
 
+def create_datas_53():
+    reddit_graph = parser_notpythonone.create_graph("./soc-redditHyperlinks-title.tsv")
+    print("OK !")
+    return(reddit_graph.dijkstra_one_node("vegan", "disney"), reddit_graph.dijkstra_one_node("missouripolitics", "greenbaypackers"))
 
 # data = create_datas_51()
 # create_logs(data[0], data[1])
-print(f"{create_datas_52()}%")
+#print(f"{create_datas_52()}%")
+print(create_datas_53())

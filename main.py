@@ -65,7 +65,7 @@ def create_datas_52():
 
 def create_logs(line1: any, line2: any) -> None:
     """ 'Cause nobody like logs better than us ! """
-    f = open(f"./log/reddit_{datetime.datetime.today()}", "w")
+    f = open(f"./log/reddit_{datetime.datetime.today()}", "w")  # Don't launch this on windows it will destroy the earth
     f.write(f"{sorted(line1)}\n")
     f.write(f"{len(line2)} \n")
     f.write(str(line2))

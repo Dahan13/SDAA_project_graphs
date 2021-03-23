@@ -37,7 +37,7 @@ def create_datas_52():
 
     # Find the 2% of active subreddits
     nbr_subreddit = len(reddit_graph)
-    nbr_subreddit = round(nbr_subreddit * 2 / 100)
+    nbr_subreddit = nbr_subreddit * 2 // 100
     greater_list = [(len(reddit_graph.edges[reddit_graph.vertices[i]])) for i in range(nbr_subreddit)]
     heapq.heapify(greater_list)
     for element in reddit_graph.edges:
@@ -59,18 +59,17 @@ def create_datas_52():
 
     # Percentage result
     result = (greater_sum / total_sum) * 100
-    result = round(result,2)
     return result
 
 
 def create_logs(line1: any, line2: any) -> None:
     """ 'Cause nobody like logs better than us ! """
     f = open(f"./log/reddit_{datetime.datetime.today()}", "w")
-    f.write(line1)
-    f.write("\n")
-    # f.write(f"{len(line2)} \n")
+    f.write(f"{sorted(line1)}\n")
+    f.write(f"{len(line2)} \n")
     f.write(str(line2))
     f.close()
 
 
+# create_logs(create_datas_51()[0], create_datas_51()[1])
 print(f"{create_datas_52()}%")

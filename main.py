@@ -17,15 +17,16 @@ def create_datas_51():
     nolink_list = []
     greater_list = [(len(reddit_graph.edges[reddit_graph.vertices[i]]), reddit_graph.vertices[i]) for i in range(10)]
     heapq.heapify(greater_list)
-    for element in reddit_graph.edges:
+    for element in reddit_graph.vertices[10:]:
+        length = len(reddit_graph.edges[element])
         # Check if this subreddit doesn't have any interaction
-        if len(reddit_graph.edges[element]) == 0:
+        if length == 0:
             nolink_list.append(element)
         else:
             # Check if this subreddit has more interactions that the smallest in the greater ones
             smallest_greater = heapq.heappop(greater_list)
-            if len(reddit_graph.edges[element]) > smallest_greater[0]:
-                heapq.heappush(greater_list, (len(reddit_graph.edges[element]), element))
+            if length > smallest_greater[0]:
+                heapq.heappush(greater_list, (length, element))
             else:
                 heapq.heappush(greater_list, smallest_greater)
 
@@ -40,7 +41,7 @@ def create_datas_52():
     nbr_subreddit = nbr_subreddit * 2 // 100
     greater_list = [(len(reddit_graph.edges[reddit_graph.vertices[i]])) for i in range(nbr_subreddit)]
     heapq.heapify(greater_list)
-    for element in reddit_graph.edges:
+    for element in reddit_graph.vertices[nbr_subreddit:]:
         smallest_greater = heapq.heappop(greater_list)
         if len(reddit_graph.edges[element]) > smallest_greater:
             heapq.heappush(greater_list, (len(reddit_graph.edges[element])))
@@ -71,5 +72,6 @@ def create_logs(line1: any, line2: any) -> None:
     f.close()
 
 
-# create_logs(create_datas_51()[0], create_datas_51()[1])
+# data = create_datas_51()
+# create_logs(data[0], data[1])
 print(f"{create_datas_52()}%")

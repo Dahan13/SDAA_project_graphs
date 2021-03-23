@@ -1,6 +1,7 @@
 import time
 import random as rand
 import matplotlib.pyplot as plt
+from statistics import mean
 import os, sys, inspect
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -13,99 +14,100 @@ def progressBar(current, total, barLength=50):
     percent = float(current) * 100 / total
     arrow = '-' * int(percent / 100 * barLength - 1) + '>'
     spaces = ' ' * (barLength - len(arrow))
+    print(f"Progress: [{arrow + spaces}]  {percent}%", end="\r")
 
-    print('Progress: [%s%s] %d %%\n' % (arrow, spaces, percent), end='\r')
+
+def dijkstra_time(tested_graph, chosen_vertex):
+    # For basic version of dijkstra :
+    start = time.process_time()
+    tested_graph.dijkstra_basic_version(chosen_vertex)
+    end = time.process_time()
+    time_dijkstra_basic = end - start
+
+    # For heap version of dijkstra :
+    start = time.process_time()
+    tested_graph.dijkstra_heap_version(chosen_vertex)
+    end = time.process_time()
+    time_dijkstra_heap = end - start
+    return time_dijkstra_basic, time_dijkstra_heap
 
 
-def dijkstra_opti_tests(number_of_try: int) -> None:
-    """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs."""
+def dijkstra_opti_tests_mean(number_of_nodes: int) -> None:
+    """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs with max edges."""
 
-    time_dijkstra_basic = 0
     time_dijkstra_basic_array = []
-    time_dijkstra_heap = 0
     time_dijkstra_heap_array = []
     n_array = []
-    for i in range(number_of_try):
-        progressBar(i, number_of_try)
+    nb_of_try = 100
+    for i in range(1, number_of_nodes):
+        progressBar(i, number_of_nodes)
         n_array.append(i)
         # Generating a random graph and randomly choosing a vertex for dijkstra
-        tested_graph = graph_generation.random_generation(10)
-        chosen_vertex = rand.randint(0, len(tested_graph) - 1)
 
-        # For basic version of dijkstra :
-        start = time.process_time()
-        tested_graph.dijkstra_basic_version(chosen_vertex)
-        end = time.process_time()
-        time_dijkstra_basic += end - start
-        time_dijkstra_basic_array.append(time_dijkstra_basic)
-
-        # For heap version of dijkstra :
-        start = time.process_time()
-        tested_graph.dijkstra_heap_version(chosen_vertex)
-        end = time.process_time()
-        time_dijkstra_heap += end - start
-        time_dijkstra_heap_array.append(time_dijkstra_heap)
+        basic_values = []
+        heap_values = []
+        for j in range(nb_of_try):
+            tested_graph = graph_generation.random_generation(i)
+            chosen_vertex = rand.randint(0, i)
+            result = dijkstra_time(tested_graph, chosen_vertex)
+            basic_values.append(result[0])
+            heap_values.append(result[1])
+        time_dijkstra_basic_array.append(mean(basic_values))
+        time_dijkstra_heap_array.append(mean(heap_values))
 
         # ploting
     plt.plot(n_array, time_dijkstra_basic_array, label="basic")
     plt.plot(n_array, time_dijkstra_heap_array, label="heap")
-    plt.xlabel('Tries number')
-    plt.ylabel('Cumulated time (in seconds)')
-    plt.title(f'Testing time with multiple tries')
+    plt.xlabel('Number of nodes')
+    plt.ylabel(f'Mean time over {nb_of_try} essay(in seconds)')
+    plt.title(f'Comparing for x nodes and max edges')
     plt.legend()
     plt.grid(True)
     plt.xscale('log')
     plt.yscale('log')
-    plt.savefig(f"../log/test_{number_of_try}_tries.png")
+    plt.savefig(f"../log/test_nodes_{number_of_nodes}_mean_{nb_of_try}.png")
     plt.close()
 
 
 def dijkstra_opti_tests_2(number_of_node: int) -> None:
     """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs."""
 
-    time_dijkstra_basic = 0
     time_dijkstra_basic_array = []
-    time_dijkstra_heap = 0
     time_dijkstra_heap_array = []
     n_array = []
+    nb_of_try = 100
     alpha = rand.random()
     alpha = round(alpha, 3)
     while 5 > alpha * (5 * 4) // 2:
         alpha = round(rand.random(), 3)
     # Choosing alpha :
-    for i in range(number_of_node):
+    for i in range(1, number_of_node):
         progressBar(i, number_of_node)
-
         n_array.append(i)
-        tested_graph = graph_generation.generate_random_graph(i, round(alpha * (i * (i - 1) // 2)))
         # Generating a random graph and randomly choosing a vertex for dijkstra
-        chosen_vertex = rand.randint(0, len(tested_graph))
 
-        # For basic version of dijkstra :
-        start = time.process_time()
-        tested_graph.dijkstra_basic_version(chosen_vertex)
-        end = time.process_time()
-        time_dijkstra_basic = end - start
-        time_dijkstra_basic_array.append(time_dijkstra_basic)
-
-        # For heap version of dijkstra :
-        start = time.process_time()
-        tested_graph.dijkstra_heap_version(chosen_vertex)
-        end = time.process_time()
-        time_dijkstra_heap = end - start
-        time_dijkstra_heap_array.append(time_dijkstra_heap)
+        basic_values = []
+        heap_values = []
+        for j in range(nb_of_try):
+            tested_graph = graph_generation.generate_random_graph(i, round(alpha * (i * (i - 1) // 2)))
+            chosen_vertex = rand.randint(0, i)
+            result = dijkstra_time(tested_graph, chosen_vertex)
+            basic_values.append(result[0])
+            heap_values.append(result[1])
+        time_dijkstra_basic_array.append(mean(basic_values))
+        time_dijkstra_heap_array.append(mean(heap_values))
 
         # ploting
     plt.plot(n_array, time_dijkstra_basic_array, label='basic')
     plt.plot(n_array, time_dijkstra_heap_array, label='heap')
-    plt.xlabel('Node number')
-    plt.ylabel('Cumulated time (in seconds)')
+    plt.xlabel('Number of nodes')
+    plt.ylabel(f'Mean time over {nb_of_try} essay(in seconds)')
     plt.title(f'For alpha = {alpha}')
     plt.legend()
     plt.grid(True)
     plt.xscale('log')
     plt.yscale('log')
-    plt.savefig(f"../log/test_alpha_{alpha}_nodes_{number_of_node}.png")
+    plt.savefig(f"../log/test_alpha_{alpha}_nodes_{number_of_node}_mean_{nb_of_try}.png")
     plt.close()
 
 
@@ -152,10 +154,15 @@ def dijkstra_opti_tests_3(number_of_node: int) -> None:
     plt.grid(True)
     plt.xscale('log')
     plt.yscale('log')
-    plt.savefig(f"../log/test_{edges_number}_edges.png")
+    plt.savefig(f"../log/test_edges_{edges_number}.png")
     plt.close()
 
 
-dijkstra_opti_tests(10000)
-dijkstra_opti_tests_2(1000)
-dijkstra_opti_tests_3(100)
+start = time.time()
+print(start)
+# dijkstra_opti_tests_mean(500)
+dijkstra_opti_tests_2(500)
+# dijkstra_opti_tests_3(100)
+end = time.time()
+print(end)
+print(end - start)

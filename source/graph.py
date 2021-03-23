@@ -162,19 +162,16 @@ class DirectedGraph:
 
     def dijkstra_one_node(self, chosen_vertex: Any, end_vertex: Any) -> Any:
         # Initializing values
-        indicator = 0
         dist = {}  # Only used for final output
         queue = []  # Items in queue will have following structure : [distance, predecessor, vertex key]
-        for vertex in self:
+        for vertex in self.vertices:
             if vertex == chosen_vertex:
                 heapq.heappush(queue, [0, None, vertex])
-            elif end_vertex in self.edges[vertex]:
+            else:
                 heapq.heappush(queue, [math.inf, None, vertex])
 
         # Beginning study
         while queue != []:  # While main queue is not empty
-            print(indicator)
-            indicator += 1
             # Return info of vertex with lowest distancen heap type use allowed for great complexity reduction
             nearest_vertex = heapq.heappop(queue)
             if nearest_vertex[2] == end_vertex :

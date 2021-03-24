@@ -128,3 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 /soc-redditHyperlinks-title.tsv
+/.idea

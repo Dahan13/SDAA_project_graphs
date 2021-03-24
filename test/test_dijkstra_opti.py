@@ -40,7 +40,7 @@ def dijkstra_time_both(tested_graph, chosen_vertex):
 def dijkstra_time_best(tested_graph, chosen_vertex1, chosen_vertex2):
     # For heap version of dijkstra :
     start = time.process_time()
-    result = tested_graph.dijkstra_heap_version(chosen_vertex1)[chosen_vertex2]
+    result = tested_graph.dijkstra_one_node(chosen_vertex1,chosen_vertex2)
     end = time.process_time()
     time_dijkstra_heap = end - start
     return time_dijkstra_heap

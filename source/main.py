@@ -1,4 +1,4 @@
-from source import parser
+import parser_notpythonone
 import heapq
 import datetime
 
@@ -13,7 +13,7 @@ def progressbar(current, total, barlength=50):
 
 
 def create_datas_51():
-    reddit_graph = parser.create_graph("./soc-redditHyperlinks-title.tsv")
+    reddit_graph = parser_notpythonone.create_graph("./../soc-redditHyperlinks-title.tsv")
 
     nolink_list = []
     greater_list = [(len(reddit_graph.edges[reddit_graph.vertices[i]]), reddit_graph.vertices[i]) for i in range(10)]
@@ -35,7 +35,7 @@ def create_datas_51():
 
 
 def create_datas_52():
-    reddit_graph = parser.create_graph("./soc-redditHyperlinks-title.tsv")
+    reddit_graph = parser_notpythonone.create_graph("./../soc-redditHyperlinks-title.tsv")
 
     # Find the 2% of active subreddits
     nbr_subreddit = len(reddit_graph)
@@ -66,13 +66,21 @@ def create_datas_52():
 
 def create_logs(line1: any, line2: any) -> None:
     """ 'Cause nobody like logs better than us ! """
-    f = open(f"./log/reddit_{datetime.datetime.today()}", "w")  # Don't launch this on windows it will destroy the earth
+    file_title = f"./log/reddit_{datetime.datetime.today()}"
+    file_title = file_title.replace(":", "_") # To ensure windows compatibility 
+    f = open(file_title, "w")
     f.write(f"{sorted(line1)}\n")
     f.write(f"{len(line2)} \n")
     f.write(str(line2))
     f.close()
 
+def create_datas_53():
+    reddit_graph = parser_notpythonone.create_graph("./soc-redditHyperlinks-title.tsv")
+    first_value = reddit_graph.dijkstra_one_node("disney", "vegan")
+    second_value = reddit_graph.dijkstra_one_node("greenbaypackers", "missouripolitics")
+    return(first_value, second_value)
 
 # data = create_datas_51()
 # create_logs(data[0], data[1])
-print(f"{create_datas_52()}%")
+#print(f"{create_datas_52()}%")
+print(create_datas_53())

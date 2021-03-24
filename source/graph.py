@@ -102,14 +102,14 @@ class DirectedGraph:
         # Initializing values
         dist = {}
         pred = {}
-        for vertex in self:
+        for vertex in self.vertices:
             dist[vertex] = math.inf
             pred[vertex] = None
         dist[chosen_vertex] = 0
 
         # Beginning study
         studied_graph = copy.deepcopy(self)
-        while len(studied_graph.edges) != 0:  # While studied graph is not empty
+        while len(studied_graph.edges):  # While studied graph is not empty
 
             # Return key with lowest value
             better_dist = math.inf
@@ -133,7 +133,7 @@ class DirectedGraph:
         # Initializing values
         dist = {}  # Only used for final output
         queue = []  # Items in queue will have following structure : [distance, predecessor, vertex key]
-        for vertex in self:
+        for vertex in self.vertices:
             if vertex == chosen_vertex:
                 heapq.heappush(queue, [0, None, vertex])
             else:
@@ -141,7 +141,6 @@ class DirectedGraph:
 
         # Beginning study
         while queue != []:  # While main queue is not empty
-
             # Return info of vertex with lowest distancen heap type use allowed for great complexity reduction
             nearest_vertex = heapq.heappop(queue)
             dist[nearest_vertex[2]] = nearest_vertex[0]
@@ -149,12 +148,51 @@ class DirectedGraph:
 
             # Handling datas
             queue2 = []  # queue2 is for temp storage
+            nearest_vertex_neighbors = self.edges[nearest_vertex[2]]
+            nearest_vertex_neighbors_keys = self.edges[nearest_vertex[2]].keys()
             for i in range(len(queue)):
                 current_item = heapq.heappop(queue)
                 # Check conditions
-                if current_item[2] in self.edges[nearest_vertex[2]].keys() and current_item[0] > nearest_vertex[0] + self.edges[nearest_vertex[2]][current_item[2]]:
-                    current_item[0] = nearest_vertex[0] + self.edges[nearest_vertex[2]][current_item[2]]
-                    current_item[1] = nearest_vertex[2]
+                if current_item[2] in nearest_vertex_neighbors_keys:
+                    new_dist = nearest_vertex_neighbors[current_item[2]]
+                    if current_item[0] > nearest_vertex[0] + new_dist:
+                        current_item[0] = nearest_vertex[0] + new_dist
+                        current_item[1] = nearest_vertex[2]
+                # Pushing new vertex infos on temp queue
+                heapq.heappush(queue2, current_item)
+            # Pouring everything into my main queue, note that nearest_vertex infos are no longer in it !
+            queue = queue2  # No need to use deepcopy here, it will make the function globally 2 times faster.
+        return dist
+
+    def dijkstra_one_node(self, chosen_vertex: Any, end_vertex: Any) -> Any:
+        # Initializing values
+        dist = {}  # Only used for final output
+        queue = []  # Items in queue will have following structure : [distance, predecessor, vertex key]
+        for vertex in self.vertices:
+            if vertex == chosen_vertex:
+                heapq.heappush(queue, [0, None, vertex])
+            else:
+                heapq.heappush(queue, [math.inf, None, vertex])
+        # Beginning study
+        while len(queue):  # While main queue is not empty
+            # Return info of vertex with lowest distancen heap type use allowed for great complexity reduction
+            nearest_vertex = heapq.heappop(queue)
+            if nearest_vertex[2] == end_vertex : # Check to end asap the function
+                return nearest_vertex[0]
+            dist[nearest_vertex[2]] = nearest_vertex[0]
+            # nearest_vertex is not explicitely deleted, but we won't push it into the queue so it's the same
+            # Handling datas
+            queue2 = []  # queue2 is for temp storage
+            nearest_vertex_neighbors = self.edges[nearest_vertex[2]]
+            nearest_vertex_neighbors_keys = self.edges[nearest_vertex[2]].keys()
+            for i in range(len(queue)):
+                current_item = heapq.heappop(queue)
+                # Check conditions
+                if current_item[2] in nearest_vertex_neighbors_keys:
+                    new_dist = nearest_vertex_neighbors[current_item[2]]
+                    if current_item[0] > nearest_vertex[0] + new_dist:
+                        current_item[0] = nearest_vertex[0] + new_dist
+                        current_item[1] = nearest_vertex[2]
                 # Pushing new vertex infos on temp queue
                 heapq.heappush(queue2, current_item)
             # Pouring everything into my main queue, note that nearest_vertex infos are no longer in it !

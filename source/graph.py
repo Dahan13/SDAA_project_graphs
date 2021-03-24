@@ -1,4 +1,4 @@
-from typing import Dict, Any, List
+from typing import Any, List
 import copy
 import math
 import heapq
@@ -177,7 +177,7 @@ class DirectedGraph:
         while len(queue):  # While main queue is not empty
             # Return info of vertex with lowest distancen heap type use allowed for great complexity reduction
             nearest_vertex = heapq.heappop(queue)
-            if nearest_vertex[2] == end_vertex : # Check to end asap the function
+            if nearest_vertex[2] == end_vertex:  # Check to end asap the function
                 return nearest_vertex[0]
             dist[nearest_vertex[2]] = nearest_vertex[0]
             # nearest_vertex is not explicitely deleted, but we won't push it into the queue so it's the same

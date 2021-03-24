@@ -17,7 +17,7 @@ def progressbar(current, total, barlength=50):
     percent = float(current) * 100 / total
     arrow = '-' * int(percent / 100 * barlength - 1) + '>'
     spaces = ' ' * (barlength - len(arrow))
-    print(f"Progress: [{arrow + spaces}]  {percent}%", end="\r")
+    print(f"Progress: [{arrow + spaces}]  {round(percent,2)}%", end="\r")
     if current == total:
         print("\n")
 
@@ -123,7 +123,7 @@ def dijkstra_opti_tests_41(number_of_node: int, nb_of_try: int = 100) -> None:
     plt.close()
 
 
-def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 100) -> None:
+def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 20) -> None:
     """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs."""
 
     time_dijkstra_basic_array = []
@@ -212,5 +212,5 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 100) -> None:
 
 # dijkstra_opti_tests_mean(500)
 # dijkstra_opti_tests_41(500)
-# dijkstra_opti_tests_42(500)
+dijkstra_opti_tests_42(100)
 # dijkstra_opti_tests_43(500)

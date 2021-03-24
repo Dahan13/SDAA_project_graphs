@@ -27,4 +27,3 @@ def create_graph_from_edges(links_list):
 def create_graph(file_name):
     # Creates graph with no duplicate edge
     return create_graph_from_edges(set(read_file(file_name)))
-

@@ -3,12 +3,13 @@ import heapq
 import datetime
 
 
-def progressBar(current, total, barLength=50):
-    percent = round(float(current) * 100 / total, 1)
-    arrow = '-' * int(percent / 100 * barLength - 1) + '>'
-    spaces = ' ' * (barLength - len(arrow))
-
-    print(f"Progress: [{arrow + spaces}] {percent}%\n", end="\r")
+def progressbar(current, total, barlength=50):
+    percent = float(current) * 100 / total
+    arrow = '-' * int(percent / 100 * barlength - 1) + '>'
+    spaces = ' ' * (barlength - len(arrow))
+    print(f"Progress: [{arrow + spaces}]  {percent}%", end="\r")
+    if current == total:
+        print("\n")
 
 
 def create_datas_51():

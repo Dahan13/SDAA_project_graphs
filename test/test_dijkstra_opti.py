@@ -1,9 +1,11 @@
-import time
+import inspect
+import os
 import random as rand
+import sys
+import time
+from statistics import mean, median
+
 import matplotlib.pyplot as plt
-from statistics import mean,median
-import datetime
-import os, sys, inspect
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
@@ -11,10 +13,10 @@ sys.path.insert(0, parent_dir)
 import graph_generation
 
 
-def progressBar(current, total, barLength=50):
+def progressbar(current, total, barlength=50):
     percent = float(current) * 100 / total
-    arrow = '-' * int(percent / 100 * barLength - 1) + '>'
-    spaces = ' ' * (barLength - len(arrow))
+    arrow = '-' * int(percent / 100 * barlength - 1) + '>'
+    spaces = ' ' * (barlength - len(arrow))
     print(f"Progress: [{arrow + spaces}]  {percent}%", end="\r")
     if current == total:
         print("\n")
@@ -51,7 +53,7 @@ def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 100) -> None
     time_dijkstra_heap_array = []
     n_array = []
     for i in range(1, number_of_nodes):
-        progressBar(i, number_of_nodes)
+        progressbar(i, number_of_nodes)
         n_array.append(i)
         # Generating a random graph and randomly choosing a vertex for dijkstra
 
@@ -92,7 +94,7 @@ def dijkstra_opti_tests_41(number_of_node: int, nb_of_try: int = 100) -> None:
     while 5 > alpha * (5 * 4) // 2:
         alpha = round(rand.random(), 3)
     for i in range(1, number_of_node):
-        progressBar(i, number_of_node)
+        progressbar(i, number_of_node)
         n_array.append(i)
         # Generating a random graph and randomly choosing a vertex for dijkstra
 
@@ -134,7 +136,7 @@ def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 100) -> None:
     while edges_number < max_edges:
         # edges_number += increment
         edges_number += 1
-        progressBar(edges_number, max_edges)
+        progressbar(edges_number, max_edges)
         n_array.append(edges_number)
 
         basic_values = []
@@ -176,7 +178,7 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 100) -> None:
     while 5 > alpha * (5 * 4) // 2:
         alpha = round(rand.random(), 3)
     for i in range(1, number_of_node):
-        progressBar(i, number_of_node)
+        progressbar(i, number_of_node)
         n_array.append(i)
 
         # Generating a random graph and randomly choosing a vertex for dijkstra

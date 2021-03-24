@@ -65,7 +65,9 @@ def create_datas_52():
 
 def create_logs(line1: any, line2: any) -> None:
     """ 'Cause nobody like logs better than us ! """
-    f = open(f"./log/reddit_{datetime.datetime.today()}", "w")  # Don't launch this on windows it will destroy the earth
+    file_title = f"./log/reddit_{datetime.datetime.today()}"
+    file_title = file_title.replace(":", "_") # To ensure windows compatibility 
+    f = open(file_title, "w")
     f.write(f"{sorted(line1)}\n")
     f.write(f"{len(line2)} \n")
     f.write(str(line2))
@@ -73,9 +75,7 @@ def create_logs(line1: any, line2: any) -> None:
 
 def create_datas_53():
     reddit_graph = parser_notpythonone.create_graph("./soc-redditHyperlinks-title.tsv")
-    print("graph generated")
     first_value = reddit_graph.dijkstra_one_node("disney", "vegan")
-    print("first value found !")
     second_value = reddit_graph.dijkstra_one_node("greenbaypackers", "missouripolitics")
     return(first_value, second_value)
 

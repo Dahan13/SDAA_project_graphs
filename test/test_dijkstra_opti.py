@@ -17,7 +17,7 @@ def progressbar(current, total, barlength=50):
     percent = float(current) * 100 / total
     arrow = '-' * int(percent / 100 * barlength - 1) + '>'
     spaces = ' ' * (barlength - len(arrow))
-    print(f"Progress: [{arrow + spaces}]  {round(percent,2)}%", end="\r")
+    print(f"Progress: [{arrow + spaces}]  {round(percent, 2)}%", end="\r")
     if current == total:
         print("\n")
 
@@ -78,7 +78,7 @@ def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 100) -> None
     plt.grid(True)
     plt.xscale("log")
     plt.yscale("log")
-    plt.savefig(f"../log/test_nodes_{number_of_nodes}_mean_{nb_of_try}.png")
+    plt.savefig(f"../log/test4_nodes_{number_of_nodes}_mean_{nb_of_try}.png")
     plt.close()
 
 
@@ -119,11 +119,11 @@ def dijkstra_opti_tests_41(number_of_node: int, nb_of_try: int = 100) -> None:
     plt.grid(True)
     plt.xscale("log")
     plt.yscale("log")
-    plt.savefig(f"../log/test41_alpha_{alpha}_nodes_{number_of_node}_mean_{nb_of_try}.png")
+    plt.savefig(f"../log/test41_nodes_{number_of_node}_mean_{nb_of_try}_alpha_{alpha}.png")
     plt.close()
 
 
-def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 20) -> None:
+def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 10) -> None:
     """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs."""
 
     time_dijkstra_basic_array = []
@@ -132,10 +132,11 @@ def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 20) -> None:
     # Choosing edge number
     edges_number = number_of_node - 2
     max_edges = (number_of_node * (number_of_node - 1)) / 2
+    print(max_edges)
     # increment = round(1 / 100 * max_edges)
     while edges_number < max_edges:
         # edges_number += increment
-        edges_number += 1
+        edges_number += 10
         progressbar(edges_number, max_edges)
         n_array.append(edges_number)
 
@@ -154,7 +155,7 @@ def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 20) -> None:
     plt.plot(n_array, time_dijkstra_basic_array, label="basic")
     plt.plot(n_array, time_dijkstra_heap_array, label="heap")
     plt.xlabel("Edges number")
-    plt.ylabel("Cumulated time (in seconds)")
+    plt.ylabel(f"Mean time over {nb_of_try} essay(in seconds)")
     plt.title(f"Edges testing")
     plt.legend()
     plt.grid(True)
@@ -164,7 +165,7 @@ def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 20) -> None:
     plt.close()
 
 
-def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 100) -> None:
+def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 20) -> None:
     """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs."""
 
     time_max = []
@@ -183,8 +184,8 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 100) -> None:
 
         # Generating a random graph and randomly choosing a vertex for dijkstra
         heap_values = []
+        tested_graph = graph_generation.generate_random_graph(i, round(alpha * (i * (i - 1) // 2)))
         for j in range(nb_of_try):
-            tested_graph = graph_generation.generate_random_graph(i, round(alpha * (i * (i - 1) // 2)))
             chosen_vertex1 = rand.randint(0, i)
             chosen_vertex2 = rand.randint(0, i)
             result = dijkstra_time_best(tested_graph, chosen_vertex1, chosen_vertex2)
@@ -200,17 +201,23 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 100) -> None:
     plt.plot(n_array, time_mean, label="tmean")
     plt.plot(n_array, time_med, label="tmed")
     plt.xlabel("Number of nodes")
-    plt.ylabel(f"Mean time over {nb_of_try} essay(in seconds)")
+    plt.ylabel(f"Time over {nb_of_try} essay(in seconds)")
     plt.title(f"For alpha = {alpha}")
     plt.legend()
     plt.grid(True)
     plt.xscale("log")
     plt.yscale("log")
-    plt.savefig(f"../log/test43_alpha_{alpha}_nodes_{number_of_node}_mean_{nb_of_try}.png")
+    plt.savefig(f"../log/test43_nodes_{number_of_node}_mean_{nb_of_try}_alpha_{alpha}.png")
     plt.close()
+    f = open(f"../log/test43_nodes_{number_of_node}_mean_{nb_of_try}_alpha_{alpha}.txt", "w")
+    f.write(f"max   {time_max}\n")
+    f.write(f"min   {time_min}\n")
+    f.write(f"mean  {time_mean}\n")
+    f.write(f"med   {time_med}\n")
+    f.close()
 
 
 # dijkstra_opti_tests_mean(500)
 # dijkstra_opti_tests_41(500)
-dijkstra_opti_tests_42(100)
+# dijkstra_opti_tests_42(200)
 # dijkstra_opti_tests_43(500)

@@ -1,5 +1,6 @@
 from source import graph as grp
 import random as rd
+import networkx as nx
 
 
 def generate_random_graph(n_nodes: int, n_edges: int, directed: bool = False) -> grp.UndirectedGraph:
@@ -78,3 +79,9 @@ def generate_random_community_graph(n_nodes_per_community: list, p_intra: float,
                     the_graph.add_edge(vertex1, vertex2)
 
     return the_graph
+
+
+graph = generate_random_graph(10, 15)
+graph = graph.to_networkx()
+nx.single_source_dijkstra(graph,0)
+# print(test)

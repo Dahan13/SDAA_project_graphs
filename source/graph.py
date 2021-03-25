@@ -2,6 +2,7 @@ from typing import Any, List
 import copy
 import math
 import heapq
+import networkx as nx
 
 
 class DirectedGraph:
@@ -198,6 +199,15 @@ class DirectedGraph:
             # Pouring everything into my main queue, note that nearest_vertex infos are no longer in it !
             queue = queue2  # No need to use deepcopy here, it will make the function globally 2 times faster.
         return dist
+
+    def to_networkx(self) -> nx.Graph:
+        graph = nx.Graph()
+        for vertice in self.vertices:
+            graph.add_node(vertice)
+        for vertice in self.edges.keys():
+            for edge in self.edges[vertice].keys():
+                graph.add_edge(vertice, edge, weight=self.edges[vertice][edge])
+        return graph
 
 
 class UndirectedGraph(DirectedGraph):

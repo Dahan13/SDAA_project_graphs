@@ -18,16 +18,17 @@ def progressbar(current, total, barlength=50):
     arrow = '-' * int(percent / 100 * barlength - 1) + '>'
     spaces = ' ' * (barlength - len(arrow))
     print(f"Progress: [{arrow + spaces}]  {round(percent, 2)}%", end="\r")
-    if current == total:
+    if percent >= 0.99:
         print("\n")
 
 
 def dijkstra_time_both(tested_graph, chosen_vertex):
+    """used for test time on 3 algo. for all path"""
     # For basic version of dijkstra :
-    # start = time.process_time()
-    # tested_graph.dijkstra_basic_version(chosen_vertex)
-    # end = time.process_time()
-    # time_dijkstra_basic = end - start
+    start = time.process_time()
+    tested_graph.dijkstra_basic_version(chosen_vertex)
+    end = time.process_time()
+    time_dijkstra_basic = end - start
 
     # For heap version of dijkstra :
     start = time.process_time()
@@ -41,10 +42,11 @@ def dijkstra_time_both(tested_graph, chosen_vertex):
     nx.single_source_dijkstra(tested_graph, chosen_vertex)
     end = time.process_time()
     time_dijkstra_nx = end - start
-    return time_dijkstra_heap, time_dijkstra_nx
+    return time_dijkstra_basic, time_dijkstra_heap, time_dijkstra_nx
 
 
 def dijkstra_time_best(tested_graph, chosen_vertex1, chosen_vertex2):
+    """used for test on a specific algo: heap one here. for a specific path"""
     # For heap version of dijkstra :
     start = time.process_time()
     result = tested_graph.dijkstra_one_node(chosen_vertex1, chosen_vertex2)
@@ -54,10 +56,11 @@ def dijkstra_time_best(tested_graph, chosen_vertex1, chosen_vertex2):
 
 
 def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 100) -> None:
-    """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs with max edges."""
+    """ Test time done by an 3 algo over all path. Give a plot. Incrementing on nodes with max_edges"""
 
     time_dijkstra_basic_array = []
     time_dijkstra_heap_array = []
+    time_dijkstra_nx_array = []
     n_array = []
     for i in range(1, number_of_nodes):
         progressbar(i, number_of_nodes)
@@ -66,18 +69,22 @@ def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 100) -> None
 
         basic_values = []
         heap_values = []
+        nx_values = []
         for j in range(nb_of_try):
             tested_graph = graph_generation.random_generation(i)
             chosen_vertex = rand.randint(0, i)
             result = dijkstra_time_both(tested_graph, chosen_vertex)
             basic_values.append(result[0])
             heap_values.append(result[1])
+            nx_values.append(result[2])
         time_dijkstra_basic_array.append(mean(basic_values))
         time_dijkstra_heap_array.append(mean(heap_values))
+        time_dijkstra_nx_array.append(mean(nx_values))
 
         # ploting
     plt.plot(n_array, time_dijkstra_basic_array, label="basic")
     plt.plot(n_array, time_dijkstra_heap_array, label="heap")
+    plt.plot(n_array, time_dijkstra_nx_array, label="nx")
     plt.xlabel("Number of nodes")
     plt.ylabel(f"Mean time over {nb_of_try} essay(in seconds)")
     plt.title(f"Comparing for x nodes and max edges")
@@ -90,39 +97,37 @@ def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 100) -> None
 
 
 def dijkstra_opti_tests_41(number_of_node: int, nb_of_try: int = 100) -> None:
-    """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs."""
+    """ Test time done by an 3 algo over all path. Give a plot. Incrementing on nodes with alpha*max_edges"""
 
-    # time_dijkstra_basic_array = []
+    time_dijkstra_basic_array = []
     time_dijkstra_heap_array = []
     time_dijkstra_nx_array = []
     n_array = []
     # Choosing alpha :
-    alpha = rand.random()
-    alpha = round(alpha, 3)
+    alpha = round(rand.random(), 3)
     while 5 > alpha * (5 * 4) // 2:
         alpha = round(rand.random(), 3)
-    alpha = 1
-    for i in range(1, number_of_node):
+    for i in range(10, number_of_node):
         progressbar(i, number_of_node)
         n_array.append(i)
         # Generating a random graph and randomly choosing a vertex for dijkstra
 
-        # basic_values = []
+        basic_values = []
         heap_values = []
         nx_values = []
         for j in range(nb_of_try):
             tested_graph = graph_generation.generate_random_graph(i, round(alpha * (i * (i - 1) // 2)))
             chosen_vertex = rand.randint(0, i - 1)
             result = dijkstra_time_both(tested_graph, chosen_vertex)
-            # basic_values.append(result[0])
-            heap_values.append(result[0])
-            nx_values.append(result[1])
-        # time_dijkstra_basic_array.append(mean(basic_values))
+            basic_values.append(result[0])
+            heap_values.append(result[1])
+            nx_values.append(result[2])
+        time_dijkstra_basic_array.append(mean(basic_values))
         time_dijkstra_heap_array.append(mean(heap_values))
         time_dijkstra_nx_array.append(mean(nx_values))
 
         # ploting
-    # plt.plot(n_array, time_dijkstra_basic_array, label="basic")
+    plt.plot(n_array, time_dijkstra_basic_array, label="basic")
     plt.plot(n_array, time_dijkstra_heap_array, label="heap")
     plt.plot(n_array, time_dijkstra_nx_array, label="nx")
     plt.xlabel("Number of nodes")
@@ -137,36 +142,41 @@ def dijkstra_opti_tests_41(number_of_node: int, nb_of_try: int = 100) -> None:
 
 
 def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 10) -> None:
-    """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs."""
+    """ Test time done by an 3 algo over all path. Give a plot. Incrementing on edges"""
 
     time_dijkstra_basic_array = []
     time_dijkstra_heap_array = []
+    time_dijkstra_nx_array = []
     n_array = []
     # Choosing edge number
     edges_number = number_of_node - 2
     max_edges = (number_of_node * (number_of_node - 1)) / 2
     print(max_edges)
-    # increment = round(1 / 100 * max_edges)
+
     while edges_number < max_edges:
-        # edges_number += increment
+
         edges_number += 10
         progressbar(edges_number, max_edges)
         n_array.append(edges_number)
 
         basic_values = []
         heap_values = []
+        nx_values = []
         for j in range(nb_of_try):
             tested_graph = graph_generation.generate_random_graph(number_of_node, edges_number)
             chosen_vertex = rand.randint(0, number_of_node - 1)
             result = dijkstra_time_both(tested_graph, chosen_vertex)
             basic_values.append(result[0])
             heap_values.append(result[1])
+            nx_values.append(result[2])
         time_dijkstra_basic_array.append(mean(basic_values))
         time_dijkstra_heap_array.append(mean(heap_values))
+        time_dijkstra_nx_array.append(mean(nx_values))
 
         # ploting
     plt.plot(n_array, time_dijkstra_basic_array, label="basic")
     plt.plot(n_array, time_dijkstra_heap_array, label="heap")
+    plt.plot(n_array, time_dijkstra_nx_array, label="nx")
     plt.xlabel("Edges number")
     plt.ylabel(f"Mean time over {nb_of_try} essay(in seconds)")
     plt.title(f"Edges testing")
@@ -179,7 +189,7 @@ def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 10) -> None:
 
 
 def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 20) -> None:
-    """ Will do some tests to ensure which algorithm is better optimized, by using randomly generated graphs."""
+    """ Test time for one algo for one specific path. Save a plot with max min mean and med time calculated over nb_of_try trial. Increment by number of node. Also save the data in a txt"""
 
     time_max = []
     time_min = []
@@ -187,8 +197,7 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 20) -> None:
     time_med = []
     n_array = []
     # Choosing alpha :
-    alpha = rand.random()
-    alpha = round(alpha, 3)
+    alpha = round(rand.random(), 3)
     while 5 > alpha * (5 * 4) // 2:
         alpha = round(rand.random(), 3)
     for i in range(1, number_of_node):
@@ -231,6 +240,6 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 20) -> None:
 
 
 # dijkstra_opti_tests_mean(500)
-dijkstra_opti_tests_41(100)
+# dijkstra_opti_tests_41(100)
 # dijkstra_opti_tests_42(200)
 # dijkstra_opti_tests_43(500)

@@ -66,7 +66,7 @@ def create_datas_52():
 
 def create_logs(line1: any, line2: any) -> None:
     """ 'Cause nobody like logs better than us ! """
-    file_title = f"./log/reddit_{datetime.datetime.today()}.txt"
+    file_title = f"../log/reddit_{datetime.datetime.today()}.txt"
     file_title = file_title.replace(":", "_")  # To ensure windows compatibility
     f = open(file_title, "w")
     f.write(f"{sorted(line1)}\n")

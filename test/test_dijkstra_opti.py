@@ -31,7 +31,7 @@ def dijkstra_time_both(tested_graph, chosen_vertex):
 
     # For heap version of dijkstra :
     start = time.process_time()
-    tested_graph.dijkstra_heap_version(chosen_vertex)
+    tested_graph.dijkstra_heap_version_2(chosen_vertex)
     end = time.process_time()
     time_dijkstra_heap = end - start
     return time_dijkstra_basic, time_dijkstra_heap
@@ -119,7 +119,7 @@ def dijkstra_opti_tests_41(number_of_node: int, nb_of_try: int = 100) -> None:
     plt.grid(True)
     plt.xscale("log")
     plt.yscale("log")
-    plt.savefig(f"../log/test41_nodes_{number_of_node}_mean_{nb_of_try}_alpha_{alpha}.png")
+    plt.savefig(f"./log/test41_nodes_{number_of_node}_mean_{nb_of_try}_alpha_{alpha}.png")
     plt.close()
 
 
@@ -218,6 +218,6 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 20) -> None:
 
 
 # dijkstra_opti_tests_mean(500)
-# dijkstra_opti_tests_41(500)
+dijkstra_opti_tests_41(100)
 # dijkstra_opti_tests_42(200)
 # dijkstra_opti_tests_43(500)

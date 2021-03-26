@@ -135,8 +135,9 @@ class DirectedGraph:
 
     def dijkstra_heap_version(self, chosen_vertex: Any) -> dict:
         # Initializing values
-        dist = {}  # Only used for final output
-        queue = []  # Items in queue will have following structure : [distance, predecessor, vertex key]
+        dist = {}
+        pred = {}
+        vertices_fighting = {}
         for vertex in self.vertices:
             if vertex == chosen_vertex:
                 heapq.heappush(queue, [0, None, vertex])

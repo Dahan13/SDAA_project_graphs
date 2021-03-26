@@ -77,8 +77,8 @@ def create_logs(line1: any, line2: any) -> None:
 
 def create_datas_53():
     reddit_graph = parser_notpythonone.create_graph("./soc-redditHyperlinks-title.tsv")
-    first_value = reddit_graph.dijkstra_one_node("disney", "vegan")
-    second_value = reddit_graph.dijkstra_one_node("greenbaypackers", "missouripolitics")
+    first_value = reddit_graph.dijkstra_heap_version("disney", "vegan")
+    second_value = reddit_graph.dijkstra_heap_version("greenbaypackers", "missouripolitics")
     return first_value, second_value
 
 

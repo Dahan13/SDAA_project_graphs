@@ -1,7 +1,13 @@
 import unittest
-from source import graph as grp
-import graph_generation as randgraph
+import os
+import sys
+import inspect
 
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+import graph_generation as randgraph
+from source import graph as grp
 
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
@@ -77,8 +83,8 @@ class MyTestCase(unittest.TestCase):
     def test_dijckstra(self):
         for i in range(10):
             used_graph = randgraph.random_generation(10)
-            basic = used_graph.dijkstra_basic_version(1)
-            heap = used_graph.dijkstra_heap_version(1)
+            basic = used_graph.dijkstra_basic_version(0)
+            heap = used_graph.dijkstra_heap_version_2(0)
             for vertex in used_graph.edges.keys():  # Checking values
                 assert basic[vertex] == heap[vertex]
 

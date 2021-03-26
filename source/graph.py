@@ -103,31 +103,34 @@ class DirectedGraph:
         # Initializing values
         dist = {}
         pred = {}
+        vertices_fighting = []
         for vertex in self.vertices:
+            vertices_fighting.append(vertex)
             dist[vertex] = math.inf
             pred[vertex] = None
         dist[chosen_vertex] = 0
 
         # Beginning study
-        studied_graph = copy.deepcopy(self)
-        while len(studied_graph.edges):  # While studied graph is not empty
+        while len(vertices_fighting):  # While studied graph is not empty
 
             # Return key with lowest value
             better_dist = math.inf
-            nearest_vertex = studied_graph.vertices[0]  # Failsafe, in case the graph is made of one node only without edges.
-            for vertex in studied_graph:
+            nearest_vertex = vertices_fighting[0]  # Failsafe, in case the graph is made of one node only without edges.
+            for vertex in vertices_fighting:
                 if dist[vertex] < better_dist:
                     better_dist = dist[vertex]
                     nearest_vertex = vertex
+            vertices_fighting.remove(nearest_vertex)
             # Actually we can't use min method because it may return the key of an already deleted vertex
 
-            # Make a copy of nearest_vertex related infos since we will delete it right away
-            nearest_vertex_infos = [(value, key) for key, value in studied_graph[nearest_vertex].items()]
-            studied_graph.remove_vertex(nearest_vertex)
+            # Make a copy of edges related to nearest_vertex to avoid repetition
+            nearest_vertex_infos = self.edges[nearest_vertex]
             for vertex in nearest_vertex_infos:
-                if dist[vertex[1]] > dist[nearest_vertex] + vertex[0]:
-                    dist[vertex[1]] = dist[nearest_vertex] + vertex[0]
-                    pred[vertex[1]] = nearest_vertex
+                new_dist = dist[nearest_vertex] + nearest_vertex_infos[vertex]
+                if dist[vertex] > new_dist:
+
+                    dist[vertex] = new_dist
+                    pred[vertex] = nearest_vertex
         return dist
 
     def dijkstra_heap_version(self, chosen_vertex: Any) -> dict:
@@ -165,39 +168,34 @@ class DirectedGraph:
             queue = queue2  # No need to use deepcopy here, it will make the function globally 2 times faster.
         return dist
 
-    def dijkstra_one_node(self, chosen_vertex: Any, end_vertex: Any) -> Any:
+    def dijkstra_heap_version_2(self, chosen_vertex: Any) -> dict:
         # Initializing values
-        dist = {}  # Only used for final output
-        queue = []  # Items in queue will have following structure : [distance, predecessor, vertex key]
+        dist = {}
+        pred = {}
+        vertices_fighting = {}
         for vertex in self.vertices:
-            if vertex == chosen_vertex:
-                heapq.heappush(queue, [0, None, vertex])
-            else:
-                heapq.heappush(queue, [math.inf, None, vertex])
+            vertices_fighting[vertex] = True
+            dist[vertex] = math.inf
+            pred[vertex] = None
+        dist[chosen_vertex] = 0
+        vertices_heap = []
+        heapq.heappush(vertices_heap, (0, chosen_vertex))
         # Beginning study
-        while len(queue):  # While main queue is not empty
-            # Return info of vertex with lowest distancen heap type use allowed for great complexity reduction
-            nearest_vertex = heapq.heappop(queue)
-            if nearest_vertex[2] == end_vertex:  # Check to end asap the function
-                return nearest_vertex[0]
-            dist[nearest_vertex[2]] = nearest_vertex[0]
-            # nearest_vertex is not explicitely deleted, but we won't push it into the queue so it's the same
-            # Handling datas
-            queue2 = []  # queue2 is for temp storage
-            nearest_vertex_neighbors = self.edges[nearest_vertex[2]]
-            nearest_vertex_neighbors_keys = self.edges[nearest_vertex[2]].keys()
-            for i in range(len(queue)):
-                current_item = heapq.heappop(queue)
-                # Check conditions
-                if current_item[2] in nearest_vertex_neighbors_keys:
-                    new_dist = nearest_vertex_neighbors[current_item[2]]
-                    if current_item[0] > nearest_vertex[0] + new_dist:
-                        current_item[0] = nearest_vertex[0] + new_dist
-                        current_item[1] = nearest_vertex[2]
-                # Pushing new vertex infos on temp queue
-                heapq.heappush(queue2, current_item)
-            # Pouring everything into my main queue, note that nearest_vertex infos are no longer in it !
-            queue = queue2  # No need to use deepcopy here, it will make the function globally 2 times faster.
+        while len(vertices_heap):  # While studied graph is not empty
+
+            # Return key with lowest value
+            nearest_dist, nearest_vertex = heapq.heappop(vertices_heap)
+            if vertices_fighting[nearest_vertex]:
+                vertices_fighting[nearest_vertex] = False
+
+                # Make a copy of edges related to nearest_vertex to avoid repetition
+                nearest_vertex_infos = self.edges[nearest_vertex]
+                for vertex in nearest_vertex_infos:
+                    new_dist = nearest_dist + nearest_vertex_infos[vertex]
+                    if vertices_fighting[vertex] and dist[vertex] > new_dist:
+                        dist[vertex] = new_dist
+                        pred[vertex] = nearest_vertex
+                        heapq.heappush(vertices_heap, (new_dist, vertex))
         return dist
 
     def to_networkx(self) -> nx.Graph:

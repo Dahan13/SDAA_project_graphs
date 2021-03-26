@@ -238,7 +238,6 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 20) -> None:
     f.write(f"med   {time_med}\n")
     f.close()
 
-
 # dijkstra_opti_tests_mean(500)
 # dijkstra_opti_tests_41(100)
 # dijkstra_opti_tests_42(200)

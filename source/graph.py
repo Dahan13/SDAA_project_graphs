@@ -128,7 +128,6 @@ class DirectedGraph:
             for vertex in nearest_vertex_infos:
                 new_dist = dist[nearest_vertex] + nearest_vertex_infos[vertex]
                 if dist[vertex] > new_dist:
-                    
                     dist[vertex] = new_dist
                     pred[vertex] = nearest_vertex
         return dist
@@ -203,6 +202,8 @@ class UndirectedGraph(DirectedGraph):
     def remove_edge(self, vertex1: Any, vertex2: Any) -> None:
         del self.edges[vertex1][vertex2]
         del self.edges[vertex2][vertex1]
+
+
 graph = DirectedGraph({0: {1: 1, 3: 1, 5: 1, 4: 1, 6: 1}, 1: {0: 1, 2: 1, 1: 1}, 2: {1: 1, 2: 1, 5: 1, 6: 1}, 3: {0: 1, 4: 1, 5: 1, 3: 1, 6: 1}, 4: {3: 1, 6: 1, 0: 1}, 5: {0: 1, 6: 1, 3: 1, 5: 1, 2: 1}, 6: {4: 1, 5: 1, 6: 1, 0: 1, 2: 1, 3: 1}})
 print(graph.dijkstra_basic_version(0))
 print(graph.dijkstra_heap_version_2(0))

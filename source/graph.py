@@ -132,7 +132,7 @@ class DirectedGraph:
                     pred[vertex] = nearest_vertex
         return dist
 
-    def dijkstra_heap_version(self, chosen_vertex: Any, target_vertex: Any) -> dict:
+    def dijkstra_heap_version(self, chosen_vertex: Any, target_vertex: Any = False) -> dict:
         # Initializing values
         dist = {vertex: math.inf for vertex in self.vertices}
         pred = {vertex: None for vertex in self.vertices}
@@ -149,7 +149,7 @@ class DirectedGraph:
                 vertices_fighting[nearest_vertex] = False
 
                 # Stop the function in case we found the targeted vertex
-                if nearest_vertex == target_vertex:
+                if nearest_vertex == target_vertex and not target_vertex:
                     return dist[nearest_vertex]
 
                 # Make a copy of edges related to nearest_vertex to avoid repetition
@@ -202,8 +202,3 @@ class UndirectedGraph(DirectedGraph):
     def remove_edge(self, vertex1: Any, vertex2: Any) -> None:
         del self.edges[vertex1][vertex2]
         del self.edges[vertex2][vertex1]
-
-
-graph = DirectedGraph({0: {1: 1, 3: 1, 5: 1, 4: 1, 6: 1}, 1: {0: 1, 2: 1, 1: 1}, 2: {1: 1, 2: 1, 5: 1, 6: 1}, 3: {0: 1, 4: 1, 5: 1, 3: 1, 6: 1}, 4: {3: 1, 6: 1, 0: 1}, 5: {0: 1, 6: 1, 3: 1, 5: 1, 2: 1}, 6: {4: 1, 5: 1, 6: 1, 0: 1, 2: 1, 3: 1}})
-print(graph.dijkstra_basic_version(0))
-print(graph.dijkstra_heap_version_2(0))

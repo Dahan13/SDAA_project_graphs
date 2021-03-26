@@ -18,73 +18,86 @@ def progressbar(current, total, barlength=50):
     arrow = '-' * int(percent / 100 * barlength - 1) + '>'
     spaces = ' ' * (barlength - len(arrow))
     print(f"Progress: [{arrow + spaces}]  {round(percent, 2)}%", end="\r")
-    if percent >= 0.99:
+    if percent >= 99:
         print("\n")
 
 
-def dijkstra_time_both(tested_graph, chosen_vertex):
-    """used for test time on 3 algo. for all path"""
+def time_basic(tested_graph, chosen_vertex):
     # For basic version of dijkstra :
     start = time.process_time()
     tested_graph.dijkstra_basic_version(chosen_vertex)
     end = time.process_time()
-    time_dijkstra_basic = end - start
+    return end - start
 
+
+def time_heap(tested_graph, chosen_vertex):
     # For heap version of dijkstra :
     start = time.process_time()
     tested_graph.dijkstra_heap_version(chosen_vertex)
     end = time.process_time()
-    time_dijkstra_heap = end - start
+    return end - start
 
+
+def time_nx_all_path(tested_graph, chosen_vertex):
     # For nx version of dijkstra :
-    tested_graph = tested_graph.to_networkx()
     start = time.process_time()
     nx.single_source_dijkstra(tested_graph, chosen_vertex)
     end = time.process_time()
-    time_dijkstra_nx = end - start
-    return time_dijkstra_basic, time_dijkstra_heap, time_dijkstra_nx
+    return end - start
+
+
+def time_nx_best(tested_graph, chosen_vertex):
+    # For nx version of better algo :
+    start = time.process_time()
+    nx.all_shortest_paths(tested_graph, chosen_vertex, None)
+    end = time.process_time()
+    return end - start
 
 
 def dijkstra_time_best(tested_graph, chosen_vertex1, chosen_vertex2):
-    """used for test on a specific algo: heap one here. for a specific path"""
-    # For heap version of dijkstra :
+    # For heap version of dijkstra for one to an other:
     start = time.process_time()
     result = tested_graph.dijkstra_one_node(chosen_vertex1, chosen_vertex2)
     end = time.process_time()
-    time_dijkstra_heap = end - start
-    return time_dijkstra_heap
+    return end - start
 
 
-def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 100) -> None:
-    """ Test time done by an 3 algo over all path. Give a plot. Incrementing on nodes with max_edges"""
-
-    time_dijkstra_basic_array = []
-    time_dijkstra_heap_array = []
-    time_dijkstra_nx_array = []
+def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 10) -> None:
+    time_basic_array = []
+    time_heap_array = []
+    time_nx_array_dj = []
+    time_nx_array_best = []
     n_array = []
-    for i in range(1, number_of_nodes):
-        progressbar(i, number_of_nodes)
+    for i in range(100, number_of_nodes, 25):
+        # progressbar(i, number_of_nodes)
         n_array.append(i)
+
         # Generating a random graph and randomly choosing a vertex for dijkstra
+        tested_graph = graph_generation.generate_random_graph(i, int(i * (i - 1) // 2))
+        tested_graph_nx = tested_graph.to_networkx()
 
         basic_values = []
         heap_values = []
-        nx_values = []
+        nx_values_dj = []
+        nx_values_best = []
         for j in range(nb_of_try):
-            tested_graph = graph_generation.random_generation(i)
-            chosen_vertex = rand.randint(0, i)
-            result = dijkstra_time_both(tested_graph, chosen_vertex)
-            basic_values.append(result[0])
-            heap_values.append(result[1])
-            nx_values.append(result[2])
-        time_dijkstra_basic_array.append(mean(basic_values))
-        time_dijkstra_heap_array.append(mean(heap_values))
-        time_dijkstra_nx_array.append(mean(nx_values))
+            chosen_vertex = rand.choice(list(tested_graph.vertices))
 
-        # ploting
-    plt.plot(n_array, time_dijkstra_basic_array, label="basic")
-    plt.plot(n_array, time_dijkstra_heap_array, label="heap")
-    plt.plot(n_array, time_dijkstra_nx_array, label="nx")
+            basic_values.append(time_basic(tested_graph, chosen_vertex))
+            heap_values.append(time_heap(tested_graph, chosen_vertex))
+            nx_values_dj.append(time_nx_all_path(tested_graph_nx, chosen_vertex))
+            nx_values_best.append(time_nx_best(tested_graph_nx, chosen_vertex))
+
+        time_basic_array.append(mean(basic_values))
+        time_heap_array.append(mean(heap_values))
+        time_nx_array_dj.append(mean(nx_values_dj))
+        time_nx_array_best.append(mean(nx_values_best))
+
+    # ploting
+    plt.plot(n_array, time_basic_array, label="basic")
+    plt.plot(n_array, time_heap_array, label="heap")
+    plt.plot(n_array, time_nx_array_dj, label="nx_dj")
+    plt.plot(n_array, time_nx_array_best, label="nx_best")
     plt.xlabel("Number of nodes")
     plt.ylabel(f"Mean time over {nb_of_try} essay(in seconds)")
     plt.title(f"Comparing for x nodes and max edges")
@@ -92,7 +105,7 @@ def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 100) -> None
     plt.grid(True)
     plt.xscale("log")
     plt.yscale("log")
-    plt.savefig(f"../log/test4_nodes_{number_of_nodes}_mean_{nb_of_try}.png")
+    plt.savefig(f"../log/test_nodes_{number_of_nodes}_mean_{nb_of_try}.png")
     plt.close()
 
 
@@ -238,7 +251,8 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 20) -> None:
     f.write(f"med   {time_med}\n")
     f.close()
 
-# dijkstra_opti_tests_mean(500)
+
+dijkstra_opti_tests_mean(1000)
 # dijkstra_opti_tests_41(100)
 # dijkstra_opti_tests_42(200)
 # dijkstra_opti_tests_43(500)

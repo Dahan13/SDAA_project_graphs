@@ -83,11 +83,9 @@ class MyTestCase(unittest.TestCase):
     def test_dijckstra(self):
         for i in range(10):
             used_graph = randgraph.random_generation(10)
-            basic = used_graph.dijkstra_basic_version(1)
-            heap = used_graph.dijkstra_heap_version_2(1)
+            basic = used_graph.dijkstra_basic_version(0)
+            heap = used_graph.dijkstra_heap_version_2(0)
             for vertex in used_graph.edges.keys():  # Checking values
-                print(basic[vertex])
-                print(heap[vertex])
                 assert basic[vertex] == heap[vertex]
 
 

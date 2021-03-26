@@ -1,8 +1,6 @@
 from typing import Dict, Any, List
-import copy
 import math
 import heapq
-
 
 class DirectedGraph:
     """oriented graph coded as a dict of dict"""
@@ -102,31 +100,31 @@ class DirectedGraph:
         # Initializing values
         dist = {}
         pred = {}
-        vertices_figthing = []
+        vertices_fighting = []
         for vertex in self.vertices:
-            vertices_figthing.append(vertex)
+            vertices_fighting.append(vertex)
             dist[vertex] = math.inf
             pred[vertex] = None
         dist[chosen_vertex] = 0
 
         # Beginning study
-        while len(vertices_figthing):  # While studied graph is not empty
+        while len(vertices_fighting):  # While studied graph is not empty
 
             # Return key with lowest value
             better_dist = math.inf
-            nearest_vertex = vertices_figthing[0]  # Failsafe, in case the graph is made of one node only without edges.
-            for vertex in vertices_figthing:
+            nearest_vertex = vertices_fighting[0]  # Failsafe, in case the graph is made of one node only without edges.
+            for vertex in vertices_fighting:
                 if dist[vertex] < better_dist:
                     better_dist = dist[vertex]
                     nearest_vertex = vertex
-            vertices_figthing.remove(nearest_vertex)
+            vertices_fighting.remove(nearest_vertex)
             # Actually we can't use min method because it may return the key of an already deleted vertex
 
             # Make a copy of edges related to nearest_vertex to avoid repetition
             nearest_vertex_infos = self.edges[nearest_vertex]
             for vertex in nearest_vertex_infos:
                 new_dist = dist[nearest_vertex] + nearest_vertex_infos[vertex]
-                if vertex in nearest_vertex_infos and dist[vertex] > new_dist:
+                if dist[vertex] > new_dist:
                     
                     dist[vertex] = new_dist
                     pred[vertex] = nearest_vertex
@@ -171,26 +169,30 @@ class DirectedGraph:
         # Initializing values
         dist = {}
         pred = {}
+        vertices_fighting = {}
         for vertex in self.vertices:
+            vertices_fighting[vertex] = True
             dist[vertex] = math.inf
             pred[vertex] = None
         dist[chosen_vertex] = 0
-        vertices_figthing = [(dist[vertex], vertex) for vertex in self.vertices]
-        heapq.heapify(vertices_figthing)
+        vertices_heap = []
+        heapq.heappush(vertices_heap, (0, chosen_vertex))
         # Beginning study
-        while len(vertices_figthing):  # While studied graph is not empty
+        while len(vertices_heap):  # While studied graph is not empty
 
             # Return key with lowest value
-            nearest_vertex = heapq.heappop(vertices_figthing)[1]
+            nearest_dist, nearest_vertex = heapq.heappop(vertices_heap)
+            if vertices_fighting[nearest_vertex]:
+                vertices_fighting[nearest_vertex] = False
 
-            # Make a copy of edges related to nearest_vertex to avoid repetition
-            nearest_vertex_infos = self.edges[nearest_vertex]
-            for vertex in nearest_vertex_infos:
-                new_dist = dist[nearest_vertex] + nearest_vertex_infos[vertex]
-                if vertex in nearest_vertex_infos and dist[vertex] > new_dist:
-                    
-                    dist[vertex] = new_dist
-                    pred[vertex] = nearest_vertex
+                # Make a copy of edges related to nearest_vertex to avoid repetition
+                nearest_vertex_infos = self.edges[nearest_vertex]
+                for vertex in nearest_vertex_infos:
+                    new_dist = nearest_dist + nearest_vertex_infos[vertex]
+                    if vertices_fighting[vertex] and dist[vertex] > new_dist:
+                        dist[vertex] = new_dist
+                        pred[vertex] = nearest_vertex
+                        heapq.heappush(vertices_heap, (new_dist, vertex))
         return dist
 class UndirectedGraph(DirectedGraph):
     """non oriented graph coded as a dict of dict"""
@@ -222,4 +224,6 @@ class UndirectedGraph(DirectedGraph):
     def remove_edge(self, vertex1: Any, vertex2: Any) -> None:
         del self.edges[vertex1][vertex2]
         del self.edges[vertex2][vertex1]
-
+graph = DirectedGraph({0: {1: 1, 3: 1, 5: 1, 4: 1, 6: 1}, 1: {0: 1, 2: 1, 1: 1}, 2: {1: 1, 2: 1, 5: 1, 6: 1}, 3: {0: 1, 4: 1, 5: 1, 3: 1, 6: 1}, 4: {3: 1, 6: 1, 0: 1}, 5: {0: 1, 6: 1, 3: 1, 5: 1, 2: 1}, 6: {4: 1, 5: 1, 6: 1, 0: 1, 2: 1, 3: 1}})
+print(graph.dijkstra_basic_version(0))
+print(graph.dijkstra_heap_version_2(0))

@@ -7,7 +7,7 @@ def progressbar(current, total, barlength=50):
     percent = float(current) * 100 / total
     arrow = '-' * int(percent / 100 * barlength - 1) + '>'
     spaces = ' ' * (barlength - len(arrow))
-    print(f"Progress: [{arrow + spaces}]  {round(percent,2)}%", end="\r")
+    print(f"Progress: [{arrow + spaces}]  {round(percent, 2)}%", end="\r")
     if current == total:
         print("\n")
 

@@ -9,6 +9,7 @@ sys.path.insert(0, parent_dir)
 import graph_generation as randgraph
 from source import graph as grp
 
+
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.graph = grp.DirectedGraph()

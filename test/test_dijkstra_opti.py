@@ -60,7 +60,7 @@ def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 10) -> None:
     time_nx_array_dj = []
     time_nx_array_best = []
     n_array = []
-    for i in range(100, number_of_nodes, 25):
+    for i in range(10, number_of_nodes, 25):
         progressbar(i, number_of_nodes)
         n_array.append(i)
 
@@ -110,7 +110,7 @@ def dijkstra_opti_tests_41(number_of_nodes: int, nb_of_try: int = 10) -> None:
     alpha = round(rand.random(), 3)
     while 5 > alpha * (5 * 4) // 2:
         alpha = round(rand.random(), 3)
-    for i in range(100, number_of_nodes, 25):
+    for i in range(10, number_of_nodes, 25):
         progressbar(i, number_of_nodes)
         n_array.append(i)
 
@@ -206,7 +206,7 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 10) -> None:
     n_array = []
     # Choosing alpha :
     alpha = 0.75
-    for i in range(100, number_of_node, 25):
+    for i in range(10, number_of_node, 25):
         progressbar(i, number_of_node)
         n_array.append(i)
 
@@ -233,7 +233,7 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 10) -> None:
     plt.plot(n_array, time_med, label="tmed")
     plt.xlabel("Number of nodes")
     plt.ylabel(f"Time over {nb_of_try} essay(in seconds)")
-    plt.title(f"For alpha = {alpha}")
+    plt.title(f"For alpha = {alpha} with heap")
     plt.legend()
     plt.grid(True)
     plt.xscale("log")

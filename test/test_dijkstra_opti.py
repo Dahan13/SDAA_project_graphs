@@ -158,13 +158,12 @@ def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 10) -> None:
     time_nx_array_best = []
     n_array = []
     # Choosing edge number
-    edges_number = number_of_node - 2
+    edges_number = number_of_node - 1
     max_edges = (number_of_node * (number_of_node - 1)) / 2
     print(max_edges)
 
     while edges_number < max_edges:
 
-        edges_number += 10
         progressbar(edges_number, max_edges)
         n_array.append(edges_number)
 
@@ -187,6 +186,7 @@ def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 10) -> None:
         time_heap_array.append(mean(heap_values))
         time_nx_array_dj.append(mean(nx_values_dj))
         time_nx_array_best.append(mean(nx_values_best))
+        edges_number += 10
 
         # ploting
     plt.plot(n_array, time_basic_array, label="basic")
@@ -195,7 +195,7 @@ def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 10) -> None:
     plt.plot(n_array, time_nx_array_best, label="nx_best")
     plt.xlabel("Edges number")
     plt.ylabel(f"Mean time over {nb_of_try} essay(in seconds)")
-    plt.title(f"Edges testing")
+    plt.title(f"Edges testing for {number_of_node} nodes")
     plt.legend()
     plt.grid(True)
     plt.xscale("log")
@@ -257,5 +257,5 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 10) -> None:
 
 # dijkstra_opti_tests_mean(1000)
 # dijkstra_opti_tests_41(1000)
-# dijkstra_opti_tests_42(200)
+dijkstra_opti_tests_42(200)
 # dijkstra_opti_tests_43(1000)

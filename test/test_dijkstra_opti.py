@@ -221,7 +221,6 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 10) -> None:
         # Generating a random graph and randomly choosing a vertex for dijkstra
         tested_graph = graph_generation.generate_random_graph(i, round(alpha * int(i * (i - 1) // 2)))
 
-        nx_values_best = []
         heap_values = []
         for j in range(nb_of_try):
             chosen_vertex = rand.choice(list(tested_graph.vertices))
@@ -255,7 +254,7 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 10) -> None:
     # f.close()
 
 
-dijkstra_opti_tests_mean(1000)
-dijkstra_opti_tests_41(1000)
-dijkstra_opti_tests_42(200)
-dijkstra_opti_tests_43(1000)
+# dijkstra_opti_tests_mean(1000)
+# dijkstra_opti_tests_41(1000)
+# dijkstra_opti_tests_42(200)
+# dijkstra_opti_tests_43(1000)

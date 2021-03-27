@@ -1,4 +1,4 @@
-from source import graph as grp
+import graph as grp
 import random as rd
 import networkx as nx
 

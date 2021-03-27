@@ -1,6 +1,5 @@
 import unittest
 from graph_generation import *
-from source import graph as grp
 
 
 class MyTestCase(unittest.TestCase):

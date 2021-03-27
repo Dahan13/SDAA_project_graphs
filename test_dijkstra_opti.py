@@ -1,15 +1,8 @@
-import inspect
-import os
 import random as rand
-import sys
 import time
 from statistics import mean, median
 import networkx as nx
 import matplotlib.pyplot as plt
-
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
 import graph_generation
 
 

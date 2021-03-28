@@ -148,7 +148,7 @@ class DirectedGraph:
                 vertices_fighting[nearest_vertex] = False
 
                 # Stop the function in case we found the targeted vertex
-                if nearest_vertex == target_vertex and not target_vertex:
+                if nearest_vertex == target_vertex and target_vertex:
                     return dist[nearest_vertex]
 
                 # Make a copy of edges related to nearest_vertex to avoid repetition

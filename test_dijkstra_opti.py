@@ -1,15 +1,8 @@
-import inspect
-import os
 import random as rand
-import sys
 import time
 from statistics import mean, median
 import networkx as nx
 import matplotlib.pyplot as plt
-
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
 import graph_generation
 
 
@@ -60,7 +53,7 @@ def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 10) -> None:
     time_nx_array_dj = []
     time_nx_array_best = []
     n_array = []
-    for i in range(100, number_of_nodes, 25):
+    for i in range(10, number_of_nodes, 25):
         progressbar(i, number_of_nodes)
         n_array.append(i)
 
@@ -91,7 +84,7 @@ def dijkstra_opti_tests_mean(number_of_nodes: int, nb_of_try: int = 10) -> None:
     plt.plot(n_array, time_nx_array_dj, label="nx_dj")
     plt.plot(n_array, time_nx_array_best, label="nx_best")
     plt.xlabel("Number of nodes")
-    plt.ylabel(f"Mean time over {nb_of_try} essay(in seconds)")
+    plt.ylabel(f"Mean time over {nb_of_try} try(in seconds)")
     plt.title(f"Comparing for x nodes and max edges")
     plt.legend()
     plt.grid(True)
@@ -110,7 +103,7 @@ def dijkstra_opti_tests_41(number_of_nodes: int, nb_of_try: int = 10) -> None:
     alpha = round(rand.random(), 3)
     while 5 > alpha * (5 * 4) // 2:
         alpha = round(rand.random(), 3)
-    for i in range(100, number_of_nodes, 25):
+    for i in range(10, number_of_nodes, 25):
         progressbar(i, number_of_nodes)
         n_array.append(i)
 
@@ -141,7 +134,7 @@ def dijkstra_opti_tests_41(number_of_nodes: int, nb_of_try: int = 10) -> None:
     plt.plot(n_array, time_nx_array_dj, label="nx_dj")
     plt.plot(n_array, time_nx_array_best, label="nx_best")
     plt.xlabel("Number of nodes")
-    plt.ylabel(f"Mean time over {nb_of_try} essay(in seconds)")
+    plt.ylabel(f"Mean time over {nb_of_try} try(in seconds)")
     plt.title(f"For alpha = {alpha}")
     plt.legend()
     plt.grid(True)
@@ -152,42 +145,50 @@ def dijkstra_opti_tests_41(number_of_nodes: int, nb_of_try: int = 10) -> None:
 
 
 def dijkstra_opti_tests_42(number_of_node: int, nb_of_try: int = 10) -> None:
-    time_dijkstra_basic_array = []
-    time_dijkstra_heap_array = []
-    time_dijkstra_nx_array = []
+    time_basic_array = []
+    time_heap_array = []
+    time_nx_array_dj = []
+    time_nx_array_best = []
     n_array = []
     # Choosing edge number
-    edges_number = number_of_node - 2
+    edges_number = number_of_node - 1
     max_edges = (number_of_node * (number_of_node - 1)) / 2
     print(max_edges)
 
     while edges_number < max_edges:
 
-        edges_number += 10
         progressbar(edges_number, max_edges)
         n_array.append(edges_number)
 
+        tested_graph = graph_generation.generate_random_graph(number_of_node, edges_number)
+        tested_graph_nx = tested_graph.to_networkx()
+
         basic_values = []
         heap_values = []
-        nx_values = []
+        nx_values_dj = []
+        nx_values_best = []
         for j in range(nb_of_try):
-            tested_graph = graph_generation.generate_random_graph(number_of_node, edges_number)
-            chosen_vertex = rand.randint(0, number_of_node - 1)
-            result = dijkstra_time_both(tested_graph, chosen_vertex)
-            basic_values.append(result[0])
-            heap_values.append(result[1])
-            nx_values.append(result[2])
-        time_dijkstra_basic_array.append(mean(basic_values))
-        time_dijkstra_heap_array.append(mean(heap_values))
-        time_dijkstra_nx_array.append(mean(nx_values))
+            chosen_vertex = rand.choice(list(tested_graph.vertices))
+
+            basic_values.append(time_basic(tested_graph, chosen_vertex))
+            heap_values.append(time_heap(tested_graph, chosen_vertex))
+            nx_values_dj.append(time_nx_all_path(tested_graph_nx, chosen_vertex))
+            nx_values_best.append(time_nx_best(tested_graph_nx, chosen_vertex))
+
+        time_basic_array.append(mean(basic_values))
+        time_heap_array.append(mean(heap_values))
+        time_nx_array_dj.append(mean(nx_values_dj))
+        time_nx_array_best.append(mean(nx_values_best))
+        edges_number += 10
 
         # ploting
-    plt.plot(n_array, time_dijkstra_basic_array, label="basic")
-    plt.plot(n_array, time_dijkstra_heap_array, label="heap")
-    plt.plot(n_array, time_dijkstra_nx_array, label="nx")
+    plt.plot(n_array, time_basic_array, label="basic")
+    plt.plot(n_array, time_heap_array, label="heap")
+    plt.plot(n_array, time_nx_array_dj, label="nx_dj")
+    plt.plot(n_array, time_nx_array_best, label="nx_best")
     plt.xlabel("Edges number")
-    plt.ylabel(f"Mean time over {nb_of_try} essay(in seconds)")
-    plt.title(f"Edges testing")
+    plt.ylabel(f"Mean time over {nb_of_try} try(in seconds)")
+    plt.title(f"Edges testing for {number_of_node} nodes")
     plt.legend()
     plt.grid(True)
     plt.xscale("log")
@@ -206,15 +207,13 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 10) -> None:
     n_array = []
     # Choosing alpha :
     alpha = 0.75
-    for i in range(100, number_of_node, 25):
+    for i in range(10, number_of_node, 25):
         progressbar(i, number_of_node)
         n_array.append(i)
 
         # Generating a random graph and randomly choosing a vertex for dijkstra
         tested_graph = graph_generation.generate_random_graph(i, round(alpha * int(i * (i - 1) // 2)))
-        # tested_graph_nx = tested_graph.to_networkx()
 
-        nx_values_best = []
         heap_values = []
         for j in range(nb_of_try):
             chosen_vertex = rand.choice(list(tested_graph.vertices))
@@ -232,8 +231,8 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 10) -> None:
     plt.plot(n_array, time_mean, label="tmean")
     plt.plot(n_array, time_med, label="tmed")
     plt.xlabel("Number of nodes")
-    plt.ylabel(f"Time over {nb_of_try} essay(in seconds)")
-    plt.title(f"For alpha = {alpha}")
+    plt.ylabel(f"Time over {nb_of_try} try(in seconds)")
+    plt.title(f"For alpha = {alpha} with heap")
     plt.legend()
     plt.grid(True)
     plt.xscale("log")
@@ -246,7 +245,6 @@ def dijkstra_opti_tests_43(number_of_node: int, nb_of_try: int = 10) -> None:
     # f.write(f"mean  {time_mean}\n")
     # f.write(f"med   {time_med}\n")
     # f.close()
-
 
 # dijkstra_opti_tests_mean(1000)
 # dijkstra_opti_tests_41(1000)

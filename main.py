@@ -1,4 +1,4 @@
-import parser
+import parser_
 import heapq
 import datetime
 
@@ -7,13 +7,13 @@ def progressbar(current, total, barlength=50):
     percent = float(current) * 100 / total
     arrow = '-' * int(percent / 100 * barlength - 1) + '>'
     spaces = ' ' * (barlength - len(arrow))
-    print(f"Progress: [{arrow + spaces}]  {round(percent,2)}%", end="\r")
+    print(f"Progress: [{arrow + spaces}]  {round(percent, 2)}%", end="\r")
     if current == total:
         print("\n")
 
 
 def create_datas_51():
-    reddit_graph = parser.create_graph("./../soc-redditHyperlinks-title.tsv")
+    reddit_graph = parser_.create_graph("./../soc-redditHyperlinks-title.tsv")
 
     nolink_list = []
     greater_list = [(len(reddit_graph.edges[reddit_graph.vertices[i]]), reddit_graph.vertices[i]) for i in range(10)]
@@ -35,7 +35,7 @@ def create_datas_51():
 
 
 def create_datas_52():
-    reddit_graph = parser.create_graph("./../soc-redditHyperlinks-title.tsv")
+    reddit_graph = parser_.create_graph("./../soc-redditHyperlinks-title.tsv")
 
     # Find the 2% of active subreddits
     nbr_subreddit = len(reddit_graph)
@@ -76,7 +76,7 @@ def create_logs(line1: any, line2: any) -> None:
 
 
 def create_datas_53():
-    reddit_graph = parser.create_graph("./soc-redditHyperlinks-title.tsv")
+    reddit_graph = parser_.create_graph("./soc-redditHyperlinks-title.tsv")
     first_value = reddit_graph.dijkstra_heap_version("disney", "vegan")
     second_value = reddit_graph.dijkstra_heap_version("greenbaypackers", "missouripolitics")
     return first_value, second_value
